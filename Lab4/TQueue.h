@@ -60,6 +60,10 @@ public:
 		if (is_empty)throw ("Queue is empty!");
 		return Data[pop_index % full_size];
 	}
+	int Get_full_size()
+	{
+		return full_size;
+	}
 	int size()
 	{
 		return push_index - pop_index;

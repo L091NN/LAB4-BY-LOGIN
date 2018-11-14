@@ -135,10 +135,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Lab4\Program.cpp" />
     <ClCompile Include="test_main.cpp" />
+    <ClCompile Include="test_program.cpp" />
     <ClCompile Include="test_queue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Lab4\Program.h" />
     <ClInclude Include="..\Lab4\TQueue.h" />
   </ItemGroup>
   <ItemGroup>

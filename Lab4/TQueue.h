@@ -11,6 +11,7 @@ class TQueue
 public:
 	TQueue(int size = 100)
 	{
+		if (size < 0) throw("Negative size!");
 		full_size = size;
 		push_index = 0;
 		pop_index = 0;
@@ -25,6 +26,7 @@ public:
 		full_size = Q.full_size;
 		push_index = Q.push_index;
 		pop_index = Q.pop_index;
+		Data = new ElemType[full_size];
 		for (int i = 0; i < full_size; i++)
 		{
 			Data[i] = Q.Data[i];
@@ -42,22 +44,22 @@ public:
 	}
 	bool is_full()
 	{
-		if (pop_index + full_size - 1 == push_index) return 1;
+		if (pop_index + full_size == push_index) return 1;
 		return 0;
 	}
 	void push(ElemType Elem)
 	{
-		if (is_full) throw ("Queue is full!");
+		if (is_full()) throw ("Queue is full!");
 		Data[push_index++ % full_size] = Elem;
 	}
 	ElemType pop()
 	{
-		if (is_empty)throw ("Queue is empty!");
+		if (is_empty())throw ("Queue is empty!");
 		return Data[pop_index++ % full_size];
 	}
 	ElemType top()
 	{
-		if (is_empty)throw ("Queue is empty!");
+		if (is_empty())throw ("Queue is empty!");
 		return Data[pop_index % full_size];
 	}
 	int Get_full_size()
@@ -89,6 +91,25 @@ public:
 
 		return *this;
 	}
+
+	bool operator==(const TQueue <ElemType> &Q)
+	{
+		if (full_size != Q.full_size) return 0;
+		if (push_index != Q.push_index) return 0;
+		if (pop_index != Q.pop_index) return 0;
+		for (long long int i = pop_index; i != push_index; i++)
+		{
+			if (Data[i] != Q.Data[i]) return 0;
+		}
+
+		return 1;
+	}
+
+	bool operator!=(const TQueue <ElemType> &Q)
+	{
+		return !(*this == Q);
+	}
+
 };
 
 

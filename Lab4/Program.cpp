@@ -2,16 +2,16 @@
 
 Program_Generation::Program_Generation()
 {
-	max_proc = 1;
-	min_proc = 1;
+	Set_max_proc(1);
+	Set_min_proc(1);
 	for (int i = 0; i < MAX_PROCESSORS; i++)
 	{
 		max_core[i] = 0;
 		min_core[i] = 0;
 	}
-	max_core[0] = 2;
-	max_tact = 100;
-	min_tact = 0;
+	Set_max_core(0, 2);
+	Set_max_tact(100);
+	Set_min_tact(1);
 }
 
 Program_Generation::~Program_Generation()
@@ -21,7 +21,7 @@ Program_Generation::~Program_Generation()
 
 void Program_Generation::Set_max_proc(int num)
 {
-	if (num > MAX_PROCESSORS || num < 1) throw("Incorrect parameter");
+	if (num > MAX_PROCESSORS || num < min_proc) throw("Incorrect parameter");
 	max_proc = num;
 }
 void Program_Generation::Set_min_proc(int num)
@@ -29,24 +29,26 @@ void Program_Generation::Set_min_proc(int num)
 	if (num > max_proc || num < 1) throw("Incorrect parameter");
 	min_proc = num;
 }
-void Program_Generation::Set_max_tact(unsigned int num)
+void Program_Generation::Set_max_tact(int num)
 {
+	if(num < min_tact) throw("Incorrect parameter");
 	max_tact = num;
 }
-void Program_Generation::Set_min_tact(unsigned int num)
+void Program_Generation::Set_min_tact(int num)
 {
-	if (num > max_tact) throw("Incorrect parameter");
+	if (num > max_tact || num < 1) throw("Incorrect parameter");
 	min_tact = num;
 }
 void Program_Generation::Set_max_core(int index, int num)
 {
-	if (index < 0 || index > max_proc) throw("INcorrect parameter");
+	if (index < 0 || index >= max_proc) throw("Incorrect parameter");
+	if (num < 0 || num > MAX_CORES) throw("Incorrect parameter"); // изменить MAX_CORES на количество в опредделённом процессоре, после написания класса процессор
 	max_core[index] = num;
 }
 void Program_Generation::Set_min_core(int index, int num)
 {
-	if (index < 0 || index > max_proc) throw("INcorrect parameter");
-	if (num > max_core[index]) throw("INcorrect parameter");
+	if (index < 0 || index >= max_proc) throw("Incorrect parameter");
+	if (num > max_core[index] || num < 0) throw("Incorrect parameter");
 	min_core[index] = num;
 }
 int Program_Generation::Get_max_proc()
@@ -57,11 +59,11 @@ int Program_Generation::Get_min_proc()
 {
 	return min_proc;
 }
-unsigned int Program_Generation::Get_max_tact()
+int Program_Generation::Get_max_tact()
 {
 	return max_tact;
 }
-unsigned int Program_Generation::Get_min_tact()
+int Program_Generation::Get_min_tact()
 {
 	return min_tact;
 }

@@ -120,6 +120,7 @@
     <ClInclude Include="TQueue.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Processor.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Sample_Processor_imitation.cpp" />
   </ItemGroup>

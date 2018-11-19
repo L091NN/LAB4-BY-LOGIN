@@ -10,7 +10,7 @@ TEST(Program_Generation, can_generation_1)
 {
 	Program_Generation PG;
 	PG.Set_min_tact(100);
-	ASSERT_NO_THROW(PG.Generate(1));
+	ASSERT_NO_THROW(PG.Generate());
 }
 
 TEST(Program_Generation, check_set_max_proc)

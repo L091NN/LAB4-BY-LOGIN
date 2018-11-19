@@ -2,6 +2,7 @@
 
 Program_Generation::Program_Generation()
 {
+	ID = 100001;
 	Set_max_proc(1);
 	Set_min_proc(1);
 	for (int i = 0; i < MAX_PROCESSORS; i++)
@@ -75,10 +76,10 @@ int Program_Generation::Get_min_core(int index)
 {
 	return min_core[index];
 }
-Program Program_Generation::Generate(int ID)
+Program Program_Generation::Generate()
 {
 	Program p;
-	p.ID = ID;
+	p.ID = ID++;
 	if (min_tact == max_tact)
 	{
 		p.tacts = min_tact;

@@ -1,12 +1,10 @@
 #ifndef __PROGRAM_H__
 #define __PROGRAM_H__
 
-#include "Processor.h"
 #include<vector>
 
-
+constexpr auto MAX_CORES = 64;
 constexpr auto MAX_PROCESSORS = 4; // максимальное количество процессоров
-
 
 using namespace std;
 
@@ -14,11 +12,29 @@ struct Program
 {
 	int ID; // имя программы
 	int tacts; // количество тактов для выполнения
-	vector<vector<int>> act_core; // 1 вектор зависит от колечества процессоров, 2 от количества занимаемых ядер
+	vector<vector<int>> act_core = {}; // 1 вектор зависит от колечества задействованных процессоров, 2 от количества занимаемых программой ядер
+
+	Program()
+	{
+		ID = -1;
+		tacts = -1;
+		vector<int> s;
+		s.push_back(-1);
+		act_core.push_back(s);
+	
+	}
+};
+
+struct Core
+{
+	int num;
+	Program P;
+	bool is_work = 0;
 };
 
 class Program_Generation
 {
+	int ID;
 	int max_core[MAX_PROCESSORS];
 	int min_core[MAX_PROCESSORS];
 	int max_proc;
@@ -43,7 +59,7 @@ public:
 	int Get_min_tact();
 	int Get_min_core(int index);
 
-	Program Generate(int ID);
+	Program Generate();
 };
 
 

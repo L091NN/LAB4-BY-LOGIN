@@ -12,16 +12,29 @@ struct Program
 {
 	int ID; // имя программы
 	int tacts; // количество тактов для выполнения
-	vector<vector<int>> act_core = {}; // 1 вектор зависит от колечества задействованных процессоров, 2 от количества занимаемых программой ядер
+	vector<vector<int>> act_core; // 1 вектор зависит от колечества задействованных процессоров, 2 от количества занимаемых программой ядер
 
 	Program()
 	{
 		ID = -1;
 		tacts = -1;
-		vector<int> s;
-		s.push_back(-1);
+		vector<int> s = {};
 		act_core.push_back(s);
-	
+	}
+
+	Program& operator=(const Program &P)
+	{
+		if (this != &P)
+		{
+			ID = P.ID;
+			tacts = P.tacts;
+			for (int x = 0; x < P.act_core.size(); ++x)
+			{
+				act_core[x] = P.act_core[x];
+			}
+		}
+
+		return *this;
 	}
 };
 

@@ -79,6 +79,7 @@ int Program_Generation::Get_min_core(int index)
 Program Program_Generation::Generate()
 {
 	Program p;
+	p.act_core.pop_back();
 	p.ID = ID++;
 	if (min_tact == max_tact)
 	{

@@ -84,17 +84,19 @@ Program Program_Generation::Generate()
 	if (min_tact == max_tact)
 	{
 		p.tacts = min_tact;
-		for (int i = 0; i < min_proc; i++)
+		int proc_num = rand() % max_proc + 1;
+		for (int i = 0; i < proc_num; i++)
 		{
+			int core_num = rand() % max_core[i] + 1;
 			vector<int> c;
-			for (int j = 0; j < min_core[i]; j++)
+			for (int j = 0; j < core_num; j++)
 			{
 				c.push_back(0);
 			}
 			p.act_core.push_back(c);
 		}
 	}
-	else
+	else 
 	{
 
 		p.tacts = rand() % (max_tact - min_tact) + min_tact;

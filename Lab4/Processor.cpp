@@ -2,6 +2,7 @@
 
 Processor::Processor(int cores)
 {
+	Number = 1;
 	noc = cores;
 	free_cores = cores;
 	for (int i = 0; i < cores; i++)
@@ -88,4 +89,34 @@ Program Processor::complete_program(const Program &P, int number_of_processor)
 	
 	return Pr;
 
+}
+
+void Processor::Set_configuration(int noc)
+{
+	this->noc = noc;
+	free_cores = noc;
+	act_program = {};
+	cores = {};
+	for (int i = 0; i < noc; i++)
+	{
+		Core c;
+		c.num = i + 1;
+		this->cores.push_back(c);
+	}
+}
+
+void Processor::Set_number(int num)
+{
+	Number = num;
+}
+
+int Processor::Get_number()
+{
+	return Number;
+}
+
+void Processor::Set_core(int num, bool work, const Program Prog)
+{
+	cores[num].is_work = work;
+	cores[num].P = Prog;
 }

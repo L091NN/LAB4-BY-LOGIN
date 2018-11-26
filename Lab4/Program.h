@@ -13,6 +13,7 @@ struct Program
 	int ID; // имя программы
 	int tacts; // количество тактов для выполнения
 	vector<vector<int>> act_core; // 1 вектор зависит от колечества задействованных процессоров, 2 от количества занимаемых программой ядер
+	vector<int> act_proc;
 
 	Program()
 	{
@@ -28,14 +29,21 @@ struct Program
 		{
 			ID = P.ID;
 			tacts = P.tacts;
+			act_core = {};
+			act_proc = {};
 			for (int x = 0; x < P.act_core.size(); ++x)
 			{
-				act_core[x] = P.act_core[x];
+				act_core.push_back(P.act_core[x]);
+			}
+			for (int x = 0; x < P.act_proc.size(); ++x)
+			{
+				act_proc.push_back(P.act_proc[x]);
 			}
 		}
 
 		return *this;
 	}
+
 };
 
 struct Core
@@ -48,12 +56,15 @@ struct Core
 class Program_Generation
 {
 	int ID;
+
+protected:
 	int max_core[MAX_PROCESSORS];
 	int min_core[MAX_PROCESSORS];
 	int max_proc;
 	int min_proc;
 	int max_tact;
 	int min_tact;
+
 public:
 	Program_Generation();
 	~Program_Generation();

@@ -7,6 +7,7 @@ using namespace std;
 
 class Processor
 {
+	static int num_of_processors;
 	int Number;
 	int noc; // number of core
 	vector<Core> cores;
@@ -15,7 +16,7 @@ class Processor
 	vector<Program>::iterator act_program_it;
 	void Set_core(int num, bool work, const Program Prog);
 public:
-	Processor(int cores = 4);
+	Processor(int num = 0, int cores = 4);
 	~Processor();
 
 
@@ -28,6 +29,7 @@ public:
 	Program Get_act_program(int num);
 	int Get_num_of_act_program();
 	int Get_number();
+	
 
 
 	Program complete_program(const Program &P, int number_of_processor);

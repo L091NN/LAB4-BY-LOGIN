@@ -1,8 +1,18 @@
 #include"Processor.h"
 
-Processor::Processor(int cores)
+int Processor::num_of_processors = 0;
+
+Processor::Processor(int num,int cores)
 {
-	Number = 1;
+	num_of_processors++;
+	if (num < 1)
+	{
+		Number = num_of_processors;
+	}
+	else
+	{
+		Number = num;
+	}
 	noc = cores;
 	free_cores = cores;
 	for (int i = 0; i < cores; i++)
@@ -18,7 +28,7 @@ Processor::Processor(int cores)
 
 Processor::~Processor()
 {
-
+	num_of_processors--;
 }
 
 bool Processor::add_program(const Program &P, int number_of_processor)

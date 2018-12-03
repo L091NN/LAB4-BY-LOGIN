@@ -1,5 +1,17 @@
 #include"Virtual_machine.h"
 
+Statistic::Statistic()
+{
+	list<Program> Complete_Program = {};
+	list<Program> Fail_Program = {};
+	list<Program> Act_Program = {};
+	list<int> tact_now = {};
+	list<Program> Queue_Program = {};
+	double num_of_prog = 0.0;
+	list<Program>::iterator PIT = {};
+	list<int>::iterator IIT = {};
+}
+
 list<Program> Statistic::Get_Complete_Program()
 {
 	return Complete_Program;
@@ -27,6 +39,8 @@ Virtual_machine::Virtual_machine(double ppt, int piq)
 {
 	program_per_tact = ppt;
 	this->piq = piq;
+	tact = 0;
+	Queue = {};
 	Processor Proc;
 	P.push_back(Proc);
 }
@@ -53,10 +67,33 @@ void Virtual_machine::Set_number_processors(int np)
 	}
 }
 
-void Virtual_machine::Set_configuration_p(int ind, int noc)
+void Virtual_machine::Set_configuration_p(int num, int noc)
 {
+	auto IT = P.begin();
+	for (; IT != P.end(); IT++)
+	{
+		if (IT->Get_number() == num)
+		{
+			break;
+		}
+	}
+	if (IT != P.end())
+	{
+		if (noc < 1)
+		{
+			P.erase(IT);
+		}
+		else
+		{
+			IT->Set_configuration(noc);
+		}
+	}
+	else
+	{
+		Processor Pro(num, noc);
+		P.push_back(Pro);
+	}
 	
-	P[ind - 1].Set_configuration(noc);
 }
 
 void Virtual_machine::Set_program_per_tact(double ppt)
@@ -311,4 +348,23 @@ int Virtual_machine::Get_tact()
 list<int> Virtual_machine::Get_tact_now()
 {
 	return tact_now;
+}
+
+vector<Processor>::iterator Virtual_machine::Get_begin_ptr_Proc()
+{
+	return P.begin();
+}
+vector<Processor>::iterator Virtual_machine::Get_end_ptr_Proc()
+{
+	return P.end();
+}
+
+TQueue<Program> Virtual_machine::Get_queue()
+{
+	return Queue;
+}
+
+int Virtual_machine::Get_programm_in_queue_when_start()
+{
+	return piq;
 }

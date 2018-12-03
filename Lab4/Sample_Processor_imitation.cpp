@@ -7,13 +7,34 @@
 
 using namespace std;
 
+int style = 0;
+int col_of_text = 0;
+int col_of_bg = 15;
+
+int mass_of_style[6][2] = 
+{
+	{ 15, 0},{ 0, 15},{ 14, 9},{ 12, 15},{ 15, 1},{ col_of_text, col_of_bg}
+};
+
 void gotoxy(int xpos, int ypos);
 void display_cursor(bool tf);
 void set_colour(int colour_of_text, int colour_of_background);
 void Output_information();
-void START_MENU(int first_item);
-void DROW(int menu_future, int menu_past);
-string MENU_ITEM(int menu);
+void START_MENU(int first_item, const Virtual_machine &VM, int ind = 0);
+void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &Vm);
+void plus_1_power_proc(Virtual_machine &VM, int num_proc);
+void minus_1_power_proc(Virtual_machine &VM, int num_proc);
+void plus_1_elem_in_queue(Virtual_machine &VM);
+void minus_1_elem_in_queue(Virtual_machine &VM);
+void plus_1_program_in_queue(Virtual_machine &VM);
+void minus_1_program_in_queue(Virtual_machine &VM);
+void plus_1_style();
+void minus_1_style();
+void Rand_colour();
+string Get_name_of_style(int num);
+string MENU_ITEM(int menu, const Virtual_machine &Vm);
+
+
 enum ConsoleColor {
 	Black = 0,
 	Blue = 1,
@@ -42,26 +63,90 @@ int main()
 	int y = 0;
 	int menu_future = 1;
 	int menu_past = 1;
-	int PROC_NUM[5] = { 0, 1, 4, 16, 64 };
+	int menu_post = 0;
 	Virtual_machine VM;
-	START_MENU(1);
+	int proc_num = VM.Get_processors().size();
+	char key = 0;
+	START_MENU(1, VM);
 	while (1)
 	{
+		if (style == 5) Rand_colour();
 		vector<Processor> VMP = VM.Get_processors();
-		_kbhit();
-		switch (_getch())
+		key = _getch();
+		switch (key)
 		{
 		case 13: // ENTER
 		{
-			if (menu_future < 5)
+			switch (menu_future)
 			{
-				menu_past = menu_future;
-				menu_future *= 5;
-				menu_future++;
+			case 19:
+			{
+
+				break;
 			}
-			else
+			case 56:
 			{
-				if (menu_future == 5)
+
+				break;
+			}
+			case 57:
+			{
+
+				break;
+			}
+			case 58:
+			{
+
+				break;
+			}
+			case 59:
+			{
+
+				break;
+			}
+			case 61:
+			{
+
+				break;
+			}
+			case 62:
+			{
+
+				break;
+			}
+			case 63:
+			{
+
+				break;
+			}
+			case 64:
+			{
+
+				break;
+			}
+			case 66:
+			{
+
+				break;
+			}
+			case 67:
+			{
+
+				break;
+			}
+			case 68:
+			{
+
+				break;
+			}
+			case 69:
+			{
+
+				break;
+			}
+			default:
+			{
+				if (menu_future % 5 != 0)
 				{
 					menu_past = menu_future;
 					menu_future *= 5;
@@ -69,10 +154,20 @@ int main()
 				}
 				else
 				{
-					menu_past = menu_future;
-					menu_future = trunc((menu_future - 1) / 5);
-					menu_future = trunc((menu_future - 1) / 5) * 5 + 1;
+					if (menu_future == 5)
+					{
+						menu_past = menu_future;
+						menu_future *= 5;
+						menu_future++;
+					}
+					else
+					{
+						menu_past = menu_future;
+						menu_future = trunc((menu_future - 1) / 5);
+						menu_future = trunc((menu_future - 1) / 5) * 5 + 1;
+					}
 				}
+			}
 			}
 
 			break;
@@ -84,21 +179,134 @@ int main()
 		}
 		case 72: // UP
 		{
-			menu_past = menu_future;
-			if (menu_future % 5 != 1)
-				menu_future -= 1;
-			else
-				menu_future += 4;
+			switch (menu_future)
+			{
+			case 66:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_max_tact() != VM.Get_min_tact())
+					{
+						VM.Set_min_tact(VM.Get_min_tact() + 1);
+					}
+					else
+					{
+						VM.Set_min_tact(1);
+					}
+				}
+				if (menu_post == 2)
+				{
+					VM.Set_max_tact(VM.Get_max_tact() + 1);
+				}
+
+				break;
+			}
+			default:
+			{
+				menu_past = menu_future;
+				if (menu_future % 5 != 1)
+					menu_future -= 1;
+				else
+					menu_future += 4;
+				break;
+			}
+			}
+
 			break;
 		}
 		case 75: // LEFT
 		{
 			switch (menu_future)
 			{
+			case 19:
+			{
+				menu_past = menu_future;
+				minus_1_style();
+				break;
+			}
 			case 56:
 			{
-				gotoxy(33, 0);
-				cout << VMP[0].Get_cores() << VMP.size();
+				menu_past = menu_future;
+				minus_1_power_proc(VM,1);
+
+				break;
+			}
+			case 57:
+			{
+				menu_past = menu_future;
+				minus_1_power_proc(VM, 2);
+
+				break;
+			}
+			case 58:
+			{
+				menu_past = menu_future;
+				minus_1_power_proc(VM, 3);
+
+				break;
+			}
+			case 59:
+			{
+				menu_past = menu_future;
+				minus_1_power_proc(VM, 4);
+
+				break;
+			}
+			case 61:
+			{
+				menu_past = menu_future;
+				minus_1_elem_in_queue(VM);
+				break;
+			}
+			case 62:
+			{
+				menu_past = menu_future;
+				minus_1_program_in_queue(VM);
+				break;
+			}
+			case 63:
+			{
+
+				break;
+			}
+			case 64:
+			{
+
+				break;
+			}
+			case 66:
+			{
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
+				break;
+			}
+			case 67:
+			{
+
+				break;
+			}
+			case 68:
+			{
+
+				break;
+			}
+			case 69:
+			{
 
 				break;
 			}
@@ -117,28 +325,166 @@ int main()
 		{
 			switch (menu_future)
 			{
-			default:
+			case 19:
 			{
 				menu_past = menu_future;
-				menu_future *= 5;
-				menu_future++;
+				plus_1_style();
+				break;
+			}
+			case 56:
+			{
+				menu_past = menu_future;
+				plus_1_power_proc(VM, 1);
+
+				break;
+			}
+			case 57:
+			{
+				menu_past = menu_future;
+				plus_1_power_proc(VM, 2);
+
+				break;
+			}
+			case 58:
+			{
+				menu_past = menu_future;
+				plus_1_power_proc(VM, 3);
+
+				break;
+			}
+			case 59:
+			{
+				menu_past = menu_future;
+				plus_1_power_proc(VM, 4);
+
+				break;
+			}
+			case 61:
+			{
+				menu_past = menu_future;
+				plus_1_elem_in_queue(VM);
+				break;
+			}
+			case 62:
+			{
+				menu_past = menu_future;
+				plus_1_program_in_queue(VM);
+				break;
+			}
+			case 63:
+			{
+
+				break;
+			}
+			case 64:
+			{
+
+				break;
+			}
+			case 66:
+			{
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
+				break;
+			}
+			case 67:
+			{
+
+				break;
+			}
+			case 68:
+			{
+
+				break;
+			}
+			case 69:
+			{
+
+				break;
+			}
+			default:
+			{
+				if (menu_future % 5 != 0)
+				{
+					menu_past = menu_future;
+					menu_future *= 5;
+					menu_future++;
+				}
+				else
+				{
+					if (menu_future == 5)
+					{
+						menu_past = menu_future;
+						menu_future *= 5;
+						menu_future++;
+					}
+					else
+					{
+						menu_past = menu_future;
+						menu_future = trunc((menu_future - 1) / 5);
+						menu_future = trunc((menu_future - 1) / 5) * 5 + 1;
+					}
+				}
 			}
 			}
 			break;
 		}
 		case 80: // DOWN
 		{
-			menu_past = menu_future;
-			if (menu_future % 5 != 0)
-				menu_future += 1;
-			else
-				menu_future -= 4;
-			break;
+			switch (menu_future)
+			{
+			case 66:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+					break;
+				}
+				if (menu_post == 1)
+				{
+					if (1 != VM.Get_min_tact())
+					{
+						VM.Set_min_tact(VM.Get_min_tact() - 1);
+					}
+					else
+					{
+						VM.Set_min_tact(VM.Get_max_tact());
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_max_tact() > VM.Get_min_tact())
+					VM.Set_max_tact(VM.Get_max_tact() - 1);
+				}
+
+				break;
+			}
+			default:
+			{
+				menu_past = menu_future;
+				if (menu_future % 5 != 0)
+					menu_future += 1;
+				else
+					menu_future -= 4;
+				break;
+			}
+			}
 		}
 		default:
 			break;
 		}
-		DROW(menu_future, menu_past);
+		DROW(menu_future, menu_past, menu_post, VM);
 	}
 	
 
@@ -178,7 +524,7 @@ void Output_information()
 
 }
 
-void DROW(int menu_future, int menu_past)
+void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &VM)
 {
 	switch (menu_future)
 	{
@@ -187,31 +533,130 @@ void DROW(int menu_future, int menu_past)
 		exit(0);
 		break;
 	}
-	default:
+	case 66:
 	{
-		if (trunc((menu_past - 1) / 5) == trunc((menu_future - 1) / 5))
+		if (13 == menu_past)
+		{
+			START_MENU(trunc((menu_future - 1) / 5) * 5 + 1, VM);
+		}
+		if (menu_post == 0)
 		{
 			int mp = menu_past % 5;
 			int mf = menu_future % 5;
 			if (mp == 0) mp = 5;
 			if (mf == 0) mf = 5;
 			gotoxy(0, mp - 1);
-			set_colour(15, 0);
-			cout << MENU_ITEM(menu_past);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
 			gotoxy(0, mf - 1);
-			set_colour(0, 15);
-			cout << MENU_ITEM(menu_future);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(66, VM);
+			gotoxy(0, 0);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 42; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(66, VM);
+			gotoxy(0, 0);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 42; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
+	default:
+	{
+		if (menu_future == menu_past)
+		{
+
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << "               ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			if (menu_future == 19) START_MENU(16, VM, 1);
 		}
 		else
 		{
-			START_MENU(trunc((menu_future - 1) / 5) * 5 + 1);
+			if (trunc((menu_past - 1) / 5) == trunc((menu_future - 1) / 5))
+			{
+				int mp = menu_past % 5;
+				int mf = menu_future % 5;
+				if (mp == 0) mp = 5;
+				if (mf == 0) mf = 5;
+				gotoxy(0, mp - 1);
+				set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+				cout << MENU_ITEM(menu_past, VM);
+				gotoxy(0, mf - 1);
+				set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+				cout << MENU_ITEM(menu_future, VM);
+				set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			}
+			else
+			{
+				START_MENU(trunc((menu_future - 1) / 5) * 5 + 1, VM);
+			}
 		}
 	}
 	}
 }
 
-string MENU_ITEM(int menu)
+string MENU_ITEM(int menu, const Virtual_machine &VM)
 {
+	Virtual_machine ViMa(VM);
 	if (menu == 1) return "Запуск";
 	if (menu == 2) return "Настройки модели";
 	if (menu == 3) return "Настройки графики";
@@ -225,35 +670,261 @@ string MENU_ITEM(int menu)
 	if (menu == 16) return "Отображать REALTIME информацию";
 	if (menu == 17) return "Показывать процессор(-ы)";
 	if (menu == 18) return "Частота отрисовки";
-	if (menu == 19) return "Стиль";
+	if (menu == 19) return "Стиль: " + Get_name_of_style(style);
 	if (menu == 20) return "Назад";
-	if (menu == 56) return "Количество ядер на 1 процессоре: ";
-	if (menu == 57) return "Количество ядер на 2 процессоре: ";
-	if (menu == 58) return "Количество ядер на 3 процессоре: ";
-	if (menu == 59) return "Количество ядер на 4 процессоре: ";
+	if (menu == 56)
+	{
+		int numcore;
+		vector<Processor> vecProc = ViMa.Get_processors();
+		auto IT = vecProc.begin();
+		auto ITend = vecProc.end();
+		for (; IT != ITend; IT++)
+		{
+			if (IT->Get_number() == 1)
+			{
+				numcore = IT->Get_cores();
+				break;
+			}
+		}
+		if (IT == ITend) numcore = 0;
+		return "Количество ядер на 1 процессоре: " + to_string(numcore);
+	}
+	if (menu == 57) 
+	{
+		int numcore;
+		vector<Processor> vecProc = ViMa.Get_processors();
+		auto IT = vecProc.begin();
+		auto ITend = vecProc.end();
+		for (; IT != ITend; IT++)
+			if (IT->Get_number() == 2)
+			{
+				numcore = IT->Get_cores();
+				break;
+			}
+		if (IT == ITend) numcore = 0;
+		return "Количество ядер на 2 процессоре: " + to_string(numcore);
+	}
+	if (menu == 58) 
+	{
+		int numcore;
+		vector<Processor> vecProc = ViMa.Get_processors();
+		auto IT = vecProc.begin();
+		auto ITend = vecProc.end();
+		for (; IT != ITend; IT++)
+			if (IT->Get_number() == 3)
+			{
+				numcore = IT->Get_cores();
+				break;
+			}
+		if (IT == ITend) numcore = 0;
+		return "Количество ядер на 3 процессоре: " + to_string(numcore);
+	}
+	if (menu == 59) 
+	{
+		int numcore;
+		vector<Processor> vecProc = ViMa.Get_processors();
+		auto IT = vecProc.begin();
+		auto ITend = vecProc.end();
+		for (; IT != ITend; IT++)
+			if (IT->Get_number() == 4)
+			{
+				numcore = IT->Get_cores();
+				break;
+			}
+		if (IT == ITend) numcore = 0;
+		return "Количество ядер на 4 процессоре: " + to_string(numcore);
+	}
 	if (menu == 60) return "Назад";
+	if (menu == 61)
+	{
+		TQueue<Program> Q = ViMa.Get_queue();
+		return "Длина очереди: " + to_string(Q.Get_full_size());
+	}
+	if (menu == 62) return "Количество программ в очереди перед запуском: " + to_string(ViMa.Get_programm_in_queue_when_start());
+	if (menu == 63) return "???";
+	if (menu == 64) return "???";
+	if (menu == 65) return "Назад";
+	if (menu == 66)
+	{
+		Virtual_machine ViMa(VM);
+		int maxt = ViMa.Get_max_tact();
+		int mint = ViMa.Get_min_tact();
+		return "Количество тактов выполнения программ: от " + to_string(mint) + " до " + to_string(maxt);
+	}
+	if (menu == 67) return "Количество требуемых процессоров для программ: от   до  ";
+	if (menu == 68) return "Количество требуемых ядер на N процессоре";
+	if (menu == 69) return "Скорость появления программ";
+	if (menu == 70) return "Назад";
 
-
+	return "404";
 }
 
-void START_MENU(int first_item)
+void START_MENU(int first_item, const Virtual_machine &VM, int ind)
 {
-	set_colour(15, 0);
+	set_colour(mass_of_style[style][0], mass_of_style[style][1]);
 	system("cls");
 	int y = 0;
 	for (int i = first_item; i < first_item + 5; i++)
 	{
-		if (i == first_item)
+		if (i == first_item && ind == 0)
 		{
 			gotoxy(0, y++);
-			set_colour(0, 15);
-			cout << MENU_ITEM(i);
-			set_colour(15, 0);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(i, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
 		}
 		else
 		{
-			gotoxy(0, y++);
-			cout << MENU_ITEM(i);
+			if (ind == 1)
+			{
+				if (i == 19)
+				{
+					gotoxy(0, y++);
+					set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+					cout << MENU_ITEM(i, VM);
+					set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+				}
+				else
+				{
+					set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+					gotoxy(0, y++);
+					cout << MENU_ITEM(i, VM);
+				}
+			}
+			else
+			{
+				gotoxy(0, y++);
+				cout << MENU_ITEM(i, VM);
+			}
 		}
 	}
+}
+
+void plus_1_power_proc(Virtual_machine &VM, int num_proc)
+{
+	auto IT = VM.Get_begin_ptr_Proc();
+	for (; IT != VM.Get_end_ptr_Proc(); IT++)
+	{
+		if (IT->Get_number() == num_proc)
+			break;
+	}
+	if (IT != VM.Get_end_ptr_Proc())
+	{
+		if (IT->Get_cores() == 64)
+		{
+			VM.Set_configuration_p(num_proc, 0);
+		}
+		else
+		{
+			VM.Set_configuration_p(num_proc, 4 * IT->Get_cores());
+		}
+	}
+	else
+	{
+		VM.Set_configuration_p(num_proc, 1);
+	}
+}
+void minus_1_power_proc(Virtual_machine &VM, int num_proc)
+{
+	int PROC_NUM[5] = { 0, 1, 4, 16, 64 };
+	auto IT = VM.Get_begin_ptr_Proc();
+	for (; IT != VM.Get_end_ptr_Proc(); IT++)
+	{
+		if (IT->Get_number() == num_proc)
+			break;
+	}
+	if (IT != VM.Get_end_ptr_Proc())
+	{
+		if (IT->Get_cores() == 0)
+		{
+			VM.Set_configuration_p(num_proc, 64);
+		}
+		else
+		{
+			VM.Set_configuration_p(num_proc,IT->Get_cores() / 4);
+		}
+	}
+	else
+	{
+		VM.Set_configuration_p(num_proc, 64);
+	}
+}
+void plus_1_elem_in_queue(Virtual_machine &VM)
+{
+	VM.Set_queue(VM.Get_queue().Get_full_size() + 1);
+}
+void minus_1_elem_in_queue(Virtual_machine &VM)
+{
+	if (VM.Get_programm_in_queue_when_start() != VM.Get_queue().Get_full_size())
+	{
+		if (VM.Get_queue().Get_full_size() > 1)
+		{
+			VM.Set_queue(VM.Get_queue().Get_full_size() - 1);
+		}
+	}
+}
+void plus_1_program_in_queue(Virtual_machine &VM)
+{
+	if (VM.Get_programm_in_queue_when_start() == VM.Get_queue().Get_full_size())
+	{
+		VM.Set_prog_in_queue_when_start(0);
+	}
+	else
+	{
+		VM.Set_prog_in_queue_when_start(VM.Get_programm_in_queue_when_start() + 1);
+	}
+}
+void minus_1_program_in_queue(Virtual_machine &VM)
+{
+	if (VM.Get_programm_in_queue_when_start() == 0)
+	{
+		VM.Set_prog_in_queue_when_start(VM.Get_queue().Get_full_size());
+	}
+	else
+	{
+		VM.Set_prog_in_queue_when_start(VM.Get_programm_in_queue_when_start() - 1);
+	}
+}
+void plus_1_style()
+{
+	if (style != 5)
+	{
+		style++;
+	}
+	else
+	{
+		style = 0;
+	}
+
+}
+void minus_1_style()
+{
+	if (style != 0)
+	{
+		style--;
+	}
+	else
+	{
+		style = 5;
+	}
+}
+string Get_name_of_style(int num)
+{
+	if (num == 0) return "ЧБ";
+	if (num == 1) return "БЧ";
+	if (num == 2) return "Украина";
+	if (num == 3) return "Япония";
+	if (num == 4) return "Pascal";
+	if (num == 5) return "Вырви глаз";
+
+}
+void Rand_colour()
+{
+	col_of_text = rand() % 16;
+	while (col_of_bg == col_of_text)
+	{
+		col_of_bg = rand() % 16;
+	}
+	mass_of_style[5][0] = col_of_text;
+	mass_of_style[5][1] = col_of_bg;
 }

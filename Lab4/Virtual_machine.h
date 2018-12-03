@@ -18,6 +18,7 @@ protected:
 	list<Program>::iterator PIT;
 	list<int>::iterator IIT;
 public:
+	Statistic();
 	list<Program> Get_Complete_Program();
 	list<Program> Get_Fail_Program();
 	list<Program> Get_Act_Program();
@@ -48,12 +49,18 @@ public:
 	void Set_prog_in_queue_when_start(int piq);
 
 	vector<Processor> Get_processors();
+	vector<Processor>::iterator Get_begin_ptr_Proc();
+	vector<Processor>::iterator Get_end_ptr_Proc();
+
+	TQueue<Program> Get_queue();
 
 	bool START();
 	void plus_tact(int t = 1);
 
 	int Get_tact();
 	list<int> Get_tact_now();
+
+	int Get_programm_in_queue_when_start();
 
 
 };

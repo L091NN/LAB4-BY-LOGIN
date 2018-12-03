@@ -60,6 +60,9 @@ public:
 	int Get_tact();
 	list<int> Get_tact_now();
 
+	int Get_index_of_proc(int num);
+	int Get_num_of_proc(int index);
+
 	int Get_programm_in_queue_when_start();
 
 

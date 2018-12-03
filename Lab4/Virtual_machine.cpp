@@ -368,3 +368,24 @@ int Virtual_machine::Get_programm_in_queue_when_start()
 {
 	return piq;
 }
+
+int Virtual_machine::Get_index_of_proc(int num)
+{
+	for (int i = 0; i < P.size(); i++)
+	{
+		if (P[i].Get_number() == num)
+		{
+			return i;
+		}
+	}
+	return -1;
+}
+int Virtual_machine::Get_num_of_proc(int index)
+{
+	if (index < P.size())
+	{
+		return P[index].Get_number();
+	}
+	
+	return -1;
+}

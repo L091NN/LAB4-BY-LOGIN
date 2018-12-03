@@ -134,11 +134,6 @@ int main()
 
 				break;
 			}
-			case 68:
-			{
-
-				break;
-			}
 			case 69:
 			{
 
@@ -205,6 +200,37 @@ int main()
 				if (menu_post == 2)
 				{
 					VM.Set_max_tact(VM.Get_max_tact() + 1);
+				}
+
+				break;
+			}
+			case 67:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_max_proc() != VM.Get_min_proc())
+					{
+						VM.Set_min_proc(VM.Get_min_proc() + 1);
+					}
+					else
+					{
+						VM.Set_min_proc(1);
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_max_proc() != MAX_PROCESSORS)
+					{
+						VM.Set_max_proc(VM.Get_max_proc() + 1);
+					}
 				}
 
 				break;
@@ -297,12 +323,15 @@ int main()
 			}
 			case 67:
 			{
-
-				break;
-			}
-			case 68:
-			{
-
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
 				break;
 			}
 			case 69:
@@ -396,12 +425,15 @@ int main()
 			}
 			case 67:
 			{
-
-				break;
-			}
-			case 68:
-			{
-
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
 				break;
 			}
 			case 69:
@@ -466,6 +498,38 @@ int main()
 				{
 					if (VM.Get_max_tact() > VM.Get_min_tact())
 					VM.Set_max_tact(VM.Get_max_tact() - 1);
+				}
+
+				break;
+			}
+			case 67:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+					break;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_min_proc() != 1)
+					{
+						VM.Set_min_proc(VM.Get_min_proc() - 1);
+					}
+					else
+					{
+						VM.Set_min_proc(VM.Get_max_proc());
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_max_proc() != VM.Get_min_proc())
+					{
+						VM.Set_max_proc(VM.Get_max_proc() - 1);
+					}
 				}
 
 				break;
@@ -539,6 +603,10 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 		{
 			START_MENU(trunc((menu_future - 1) / 5) * 5 + 1, VM);
 		}
+		if ((menu_past - 1) / 5 == 68)
+		{
+			START_MENU(trunc((menu_future - 1) / 5) * 5 + 1, VM);
+		}
 		if (menu_post == 0)
 		{
 			int mp = menu_past % 5;
@@ -586,6 +654,83 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
 			int i = 0;
 			for (; i < 42; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
+	case 67:
+	{
+		if (menu_post == 0)
+		{
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			if (mp == 0) mp = 5;
+			if (mf == 0) mf = 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
+			gotoxy(0, mf - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(67, VM);
+			gotoxy(0, 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 50; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(67, VM);
+			gotoxy(0, 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 50; i++)
 			{
 				cout << buf[i];
 			}
@@ -751,10 +896,70 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 		int mint = ViMa.Get_min_tact();
 		return "Количество тактов выполнения программ: от " + to_string(mint) + " до " + to_string(maxt);
 	}
-	if (menu == 67) return "Количество требуемых процессоров для программ: от   до  ";
+	if (menu == 67)
+	{
+		Virtual_machine ViMa(VM);
+		int maxp = ViMa.Get_max_proc();
+		int minp = ViMa.Get_min_proc();
+		return "Количество требуемых процессоров для программ: от " + to_string(minp) + " до " + to_string(maxp);
+	}
 	if (menu == 68) return "Количество требуемых ядер на N процессоре";
 	if (menu == 69) return "Скорость появления программ";
 	if (menu == 70) return "Назад";
+	int num_proc = 0;
+	if (menu == 341)
+	{
+		Virtual_machine ViMa(VM);
+		int maxp = 0;
+		int minp = 0;
+		if (ViMa.Get_index_of_proc(1) != -1)
+		{
+			num_proc++;
+			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(1));
+			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(1));
+		}
+		return "Количество требуемых ядер для программ на 1 процессоре: от " + to_string(minp) + " до " + to_string(maxp);
+	}
+	if (menu == 342)
+	{
+		num_proc++;
+		Virtual_machine ViMa(VM);
+		int maxp = 0;
+		int minp = 0;
+		if (ViMa.Get_index_of_proc(2) != -1)
+		{
+			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(2));
+			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(2));
+		}
+		return "Количество требуемых ядер для программ на 2 процессоре: от " + to_string(minp) + " до " + to_string(maxp);
+	}
+	if (menu == 343)
+	{
+		num_proc++;
+		Virtual_machine ViMa(VM);
+		int maxp = 0;
+		int minp = 0;
+		if (ViMa.Get_index_of_proc(3) != -1)
+		{
+			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(3));
+			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(3));
+		}
+		return "Количество требуемых ядер для программ на 3 процессоре: от " + to_string(minp) + " до " + to_string(maxp);
+	}
+	if (menu == 344)
+	{
+		num_proc++;
+		Virtual_machine ViMa(VM);
+		int maxp = 0;
+		int minp = 0;
+		if (ViMa.Get_index_of_proc(4) != -1)
+		{
+			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(4));
+			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(4));
+		}
+		return "Количество требуемых ядер для программ на 4 процессоре: от " + to_string(minp) + " до " + to_string(maxp);
+	}
+	if (menu == 345) return "Назад";
 
 	return "404";
 }

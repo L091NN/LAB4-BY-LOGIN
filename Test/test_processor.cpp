@@ -18,7 +18,7 @@ TEST(Processor, can_add_program)
 TEST(Processor, check_correct_add_program)
 {
 	Program Prog1,Prog2;
-	Processor P(16);
+	Processor P(1, 16);
 	for (int i = 0; i < 4; i++)
 	{
 		Prog1.act_core[0].push_back(0);
@@ -44,7 +44,7 @@ TEST(Processor, check_correct_add_program)
 TEST(Processor, check_correct_complete_program)
 {
 	Program Prog1, Prog2;
-	Processor P(16);
+	Processor P(1, 16);
 	Prog1.ID = 1;
 	Prog2.ID = 2;
 	for (int i = 0; i < 4; i++)

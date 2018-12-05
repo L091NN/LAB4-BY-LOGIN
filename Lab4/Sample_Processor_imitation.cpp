@@ -1,4 +1,4 @@
-#include"Virtual_machine.h"
+Ôªø#include"Virtual_machine.h"
 #include<conio.h>
 #include<Windows.h>
 #include<iostream>
@@ -15,6 +15,15 @@ int mass_of_style[6][2] =
 {
 	{ 15, 0},{ 0, 15},{ 14, 9},{ 12, 15},{ 15, 1},{ col_of_text, col_of_bg}
 };
+
+bool Show_RTI = 1;
+bool Show_Proc = 1;
+unsigned int FPT = 1;
+unsigned int time_of_work = 0;
+unsigned int V = 1000;
+bool big_statistic_now = 1;
+bool big_statistic_after = 0;
+unsigned int LOGIN = 0;
 
 void gotoxy(int xpos, int ypos);
 void display_cursor(bool tf);
@@ -64,6 +73,9 @@ int main()
 	int menu_future = 1;
 	int menu_past = 1;
 	int menu_post = 0;
+	int menu_futurec = 1;
+	int menu_pastc = 1;
+	int menu_postc = 0;
 	Virtual_machine VM;
 	int proc_num = VM.Get_processors().size();
 	char key = 0;
@@ -79,9 +91,38 @@ int main()
 		{
 			switch (menu_future)
 			{
-			case 19:
+			case 1:
 			{
 
+				break;
+			}
+			case 16:
+			{
+
+				break;
+			}
+			case 17:
+			{
+
+				break;
+			}
+			case 18:
+			{
+				if (FPT == 91)
+				{
+					if (LOGIN == 0)
+					{
+						LOGIN = 1;
+					}
+				}
+				break;
+			}
+			case 19:
+			{
+				if (style == 5 && LOGIN == 1)
+				{
+					LOGIN = 2;
+				}
 				break;
 			}
 			case 56:
@@ -135,6 +176,46 @@ int main()
 				break;
 			}
 			case 69:
+			{
+
+				break;
+			}
+			case 71:
+			{
+
+				break;
+			}
+			case 72:
+			{
+
+				break;
+			}
+			case 73:
+			{
+				big_statistic_now -= 1;
+				break;
+			}
+			case 74:
+			{
+				big_statistic_after -= 1;
+				break;
+			}
+			case 341:
+			{
+
+				break;
+			}
+			case 342:
+			{
+
+				break;
+			}
+			case 343:
+			{
+
+				break;
+			}
+			case 344:
 			{
 
 				break;
@@ -227,12 +308,177 @@ int main()
 				}
 				if (menu_post == 2)
 				{
-					if (VM.Get_max_proc() != MAX_PROCESSORS)
+					if (VM.Get_max_proc() < VM.Get_processors().size())
 					{
 						VM.Set_max_proc(VM.Get_max_proc() + 1);
 					}
 				}
 
+				break;
+			}
+			case 69:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					VM.Set_program_per_tact(VM.Get_program_per_tact() + 1.0);
+				}
+				if (menu_post == 2)
+				{
+					VM.Set_program_per_tact(VM.Get_program_per_tact() + 0.1);
+				}
+
+				break;
+			}
+			case 341:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(1) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(1)) == VM.Get_max_core(VM.Get_index_of_proc(1)))
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(1), 0);
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(1), VM.Get_min_core(VM.Get_index_of_proc(1)) + 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(1) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(1)) != VM.Get_processors()[VM.Get_index_of_proc(1)].Get_cores())
+						{
+							VM.Set_max_core(VM.Get_index_of_proc(1), VM.Get_max_core(VM.Get_index_of_proc(1)) + 1);
+						}
+					}
+				}
+				break;
+			}
+			case 342:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(2) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(2)) == VM.Get_max_core(VM.Get_index_of_proc(2)))
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(2), 0);
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(2), VM.Get_min_core(VM.Get_index_of_proc(2)) + 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(2) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(2)) != VM.Get_processors()[VM.Get_index_of_proc(2)].Get_cores())
+						{
+							VM.Set_max_core(VM.Get_index_of_proc(2), VM.Get_max_core(VM.Get_index_of_proc(2)) + 1);
+						}
+					}
+				}
+				break;
+			}
+			case 343:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(3) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(3)) == VM.Get_max_core(VM.Get_index_of_proc(3)))
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(3), 0);
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(3), VM.Get_min_core(VM.Get_index_of_proc(3)) + 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(3) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(3)) != VM.Get_processors()[VM.Get_index_of_proc(3)].Get_cores())
+						{
+							VM.Set_max_core(VM.Get_index_of_proc(3), VM.Get_max_core(VM.Get_index_of_proc(3)) + 1);
+						}
+					}
+				}
+				break;
+			}
+			case 344:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 1)
+						menu_future -= 1;
+					else
+						menu_future += 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(4) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(4)) == VM.Get_max_core(VM.Get_index_of_proc(4)))
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(4), 0);
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(4), VM.Get_min_core(VM.Get_index_of_proc(4)) + 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(4) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(4)) != VM.Get_processors()[VM.Get_index_of_proc(4)].Get_cores())
+						{
+							VM.Set_max_core(VM.Get_index_of_proc(4), VM.Get_max_core(VM.Get_index_of_proc(4)) + 1);
+						}
+					}
+				}
 				break;
 			}
 			default:
@@ -252,6 +498,25 @@ int main()
 		{
 			switch (menu_future)
 			{
+			case 16:
+			{
+				Show_RTI -= 1;
+				break;
+			}
+			case 17:
+			{
+				Show_Proc -= 1;
+				break;
+			}
+			case 18:
+			{
+				if (FPT > 1)
+				{
+					FPT--;
+				}
+
+				break;
+			}
 			case 19:
 			{
 				menu_past = menu_future;
@@ -336,7 +601,93 @@ int main()
 			}
 			case 69:
 			{
-
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
+				break;
+			}
+			case 71:
+			{
+				if (time_of_work)
+				{
+					time_of_work--;
+				}
+				break;
+			}
+			case 72:
+			{
+				if (V)
+				{
+					V -= 5;
+				}
+				break;
+			}
+			case 73:
+			{
+				big_statistic_now -= 1;
+				break;
+			}
+			case 74:
+			{
+				big_statistic_after -= 1;
+				break;
+			}
+			case 341:
+			{
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
+				break;
+			}
+			case 342:
+			{
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
+				break;
+			}
+			case 343:
+			{
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
+				break;
+			}
+			case 344:
+			{
+				menu_past = menu_future;
+				if (menu_post == 0)
+				{
+					menu_post = 2;
+				}
+				else
+				{
+					menu_post--;
+				}
 				break;
 			}
 			default:
@@ -354,6 +705,21 @@ int main()
 		{
 			switch (menu_future)
 			{
+			case 16:
+			{
+				Show_RTI -= 1;
+				break;
+			}
+			case 17:
+			{
+				Show_Proc -= 1;
+				break;
+			}
+			case 18:
+			{
+				FPT++;
+				break;
+			}
 			case 19:
 			{
 				menu_past = menu_future;
@@ -438,7 +804,91 @@ int main()
 			}
 			case 69:
 			{
-
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
+				break;
+			}
+			case 71:
+			{
+				time_of_work++;
+				break;
+			}
+			case 72:
+			{
+				V += 5;
+				break;
+			}
+			case 73:
+			{
+				big_statistic_now -= 1;
+				break;
+			}
+			case 74:
+			{
+				big_statistic_after -= 1;
+				break;
+			}
+			case 341:
+			{
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
+				break;
+				break;
+			}
+			case 342:
+			{
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
+				break;
+				break;
+			}
+			case 343:
+			{
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
+				break;
+				break;
+			}
+			case 344:
+			{
+				menu_past = menu_future;
+				if (menu_post == 2)
+				{
+					menu_post = 0;
+				}
+				else
+				{
+					menu_post++;
+				}
+				break;
 				break;
 			}
 			default:
@@ -534,6 +984,193 @@ int main()
 
 				break;
 			}
+			case 69:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_program_per_tact() > 1.01)
+					{
+						VM.Set_program_per_tact(VM.Get_program_per_tact() - 1.0);
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_program_per_tact() > 0.101)
+					{
+						VM.Set_program_per_tact(VM.Get_program_per_tact() - 0.1);
+					}
+				}
+
+				break;
+			}
+			case 341:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+					break;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(1) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(1)) == 0)
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(1), VM.Get_max_core(VM.Get_index_of_proc(1)));
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(1), VM.Get_min_core(VM.Get_index_of_proc(1)) - 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(1) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(1)) != 1)
+						{
+							if (VM.Get_max_core(VM.Get_index_of_proc(1)) != VM.Get_min_core(VM.Get_index_of_proc(1)))
+							{
+								VM.Set_max_core(VM.Get_index_of_proc(1), VM.Get_max_core(VM.Get_index_of_proc(1)) - 1);
+							}
+						}
+					}
+				}
+				break;
+			}
+			case 342:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+					break;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(2) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(2)) == 0)
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(2), VM.Get_max_core(VM.Get_index_of_proc(2)));
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(2), VM.Get_min_core(VM.Get_index_of_proc(2)) - 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(2) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(2)) != 1)
+						{
+							if (VM.Get_max_core(VM.Get_index_of_proc(2)) != VM.Get_min_core(VM.Get_index_of_proc(2)))
+							{
+								VM.Set_max_core(VM.Get_index_of_proc(2), VM.Get_max_core(VM.Get_index_of_proc(2)) - 1);
+							}
+						}
+					}
+				}
+				break;
+			}
+			case 343:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+					break;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(3) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(3)) == 0)
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(3), VM.Get_max_core(VM.Get_index_of_proc(3)));
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(3), VM.Get_min_core(VM.Get_index_of_proc(3)) - 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(3) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(3)) != 1)
+						{
+							if (VM.Get_max_core(VM.Get_index_of_proc(3)) != VM.Get_min_core(VM.Get_index_of_proc(3)))
+							{
+								VM.Set_max_core(VM.Get_index_of_proc(3), VM.Get_max_core(VM.Get_index_of_proc(3)) - 1);
+							}
+						}
+					}
+				}
+				break;
+			}
+			case 344:
+			{
+				if (menu_post == 0)
+				{
+					menu_past = menu_future;
+					if (menu_future % 5 != 0)
+						menu_future += 1;
+					else
+						menu_future -= 4;
+					break;
+				}
+				if (menu_post == 1)
+				{
+					if (VM.Get_index_of_proc(4) != -1)
+					{
+						if (VM.Get_min_core(VM.Get_index_of_proc(4)) == 0)
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(4), VM.Get_max_core(VM.Get_index_of_proc(4)));
+						}
+						else
+						{
+							VM.Set_min_core(VM.Get_index_of_proc(4), VM.Get_min_core(VM.Get_index_of_proc(4)) - 1);
+						}
+					}
+				}
+				if (menu_post == 2)
+				{
+					if (VM.Get_index_of_proc(4) != -1)
+					{
+						if (VM.Get_max_core(VM.Get_index_of_proc(4)) != 1)
+						{
+							if (VM.Get_max_core(VM.Get_index_of_proc(4)) != VM.Get_min_core(VM.Get_index_of_proc(4)))
+							{
+								VM.Set_max_core(VM.Get_index_of_proc(4), VM.Get_max_core(VM.Get_index_of_proc(4)) - 1);
+							}
+						}
+					}
+				}
+				break;
+			}
 			default:
 			{
 				menu_past = menu_future;
@@ -548,7 +1185,10 @@ int main()
 		default:
 			break;
 		}
-		DROW(menu_future, menu_past, menu_post, VM);
+		if (key != -32)
+		{
+			DROW(menu_future, menu_past, menu_post, VM);
+		}
 	}
 	
 
@@ -607,7 +1247,7 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 		{
 			START_MENU(trunc((menu_future - 1) / 5) * 5 + 1, VM);
 		}
-		if (menu_post == 0)
+		if (menu_post == 0 && menu_past != 13)
 		{
 			int mp = menu_past % 5;
 			int mf = menu_future % 5;
@@ -759,6 +1399,382 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 
 		break;
 	}
+	case 69:
+	{
+		if (menu_post == 0)
+		{
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			if (mp == 0) mp = 5;
+			if (mf == 0) mf = 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
+			gotoxy(0, mf - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(69, VM);
+			gotoxy(0, 3);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 29; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ',')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << buf[i++];
+			cout << buf[i++];
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(69, VM);
+			gotoxy(0, 3);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 29; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ',')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << buf[i];
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
+	case 341:
+	{
+		if (menu_past == 68)
+		{
+			START_MENU(menu_future, VM);
+		}
+		if (menu_post == 0 && menu_past != 68)
+		{
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			if (mp == 0) mp = 5;
+			if (mf == 0) mf = 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
+			gotoxy(0, mf - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(341, VM);
+			gotoxy(0, 0);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(341, VM);
+			gotoxy(0, 0);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
+	case 342:
+	{
+		if (menu_post == 0)
+		{
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			if (mp == 0) mp = 5;
+			if (mf == 0) mf = 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
+			gotoxy(0, mf - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(342, VM);
+			gotoxy(0, 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(342, VM);
+			gotoxy(0, 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
+	case 343:
+	{
+		if (menu_post == 0)
+		{
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			if (mp == 0) mp = 5;
+			if (mf == 0) mf = 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
+			gotoxy(0, mf - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(343, VM);
+			gotoxy(0, 2);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(343, VM);
+			gotoxy(0, 2);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
+	case 344:
+	{
+		if (menu_post == 0)
+		{
+			int mp = menu_past % 5;
+			int mf = menu_future % 5;
+			if (mp == 0) mp = 5;
+			if (mf == 0) mf = 5;
+			gotoxy(0, mp - 1);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			cout << MENU_ITEM(menu_past, VM);
+			gotoxy(0, mf - 1);
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			cout << MENU_ITEM(menu_future, VM);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 1)
+		{
+			string buf = MENU_ITEM(344, VM);
+			gotoxy(0, 3);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+		if (menu_post == 2)
+		{
+			string buf = MENU_ITEM(344, VM);
+			gotoxy(0, 3);
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			int i = 0;
+			for (; i < 59; i++)
+			{
+				cout << buf[i];
+			}
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			while (buf[i] != ' ')
+			{
+				cout << buf[i];
+				i++;
+			}
+			cout << buf[i++];
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			while (buf[i] != '\0')
+			{
+				cout << buf[i];
+				i++;
+			}
+			set_colour(0, mass_of_style[style][1]);
+			cout << "          ";
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		}
+
+		break;
+	}
 	default:
 	{
 		if (menu_future == menu_past)
@@ -789,6 +1805,7 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 				set_colour(mass_of_style[style][1], mass_of_style[style][0]);
 				cout << MENU_ITEM(menu_future, VM);
 				set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+				cout << "  ";
 			}
 			else
 			{
@@ -802,21 +1819,70 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 string MENU_ITEM(int menu, const Virtual_machine &VM)
 {
 	Virtual_machine ViMa(VM);
-	if (menu == 1) return "«‡ÔÛÒÍ";
-	if (menu == 2) return "Õ‡ÒÚÓÈÍË ÏÓ‰ÂÎË";
-	if (menu == 3) return "Õ‡ÒÚÓÈÍË „‡ÙËÍË";
-	if (menu == 4) return "Œ ÔÓ„‡ÏÏÂ";
-	if (menu == 5) return "¬˚ıÓ‰";
-	if (menu == 11) return "Õ‡ÒÚÓÈÍË ÔÓˆÂÒÒÓ‡";
-	if (menu == 12) return "Õ‡ÒÚÓÈÍË Ó˜ÂÂ‰Ë";
-	if (menu == 13) return "Õ‡ÒÚÓÈÍË „ÂÌÂ‡ÚÓ‡ ÔÓ„‡ÏÏ";
-	if (menu == 14) return "Õ‡ÒÚÓÈÍË ÒÚ‡ÚËÒÚËÍË";
-	if (menu == 15) return "Õ‡Á‡‰";
-	if (menu == 16) return "ŒÚÓ·‡Ê‡Ú¸ REALTIME ËÌÙÓÏ‡ˆË˛";
-	if (menu == 17) return "œÓÍ‡Á˚‚‡Ú¸ ÔÓˆÂÒÒÓ(-˚)";
-	if (menu == 18) return "◊‡ÒÚÓÚ‡ ÓÚËÒÓ‚ÍË";
-	if (menu == 19) return "—ÚËÎ¸: " + Get_name_of_style(style);
-	if (menu == 20) return "Õ‡Á‡‰";
+	if (menu == 1) return "–ó–∞–ø—É—Å–∫";
+	if (menu == 2) return "–ù–∞—Å—Ç—Ä–æ–π–∫–∏ –º–æ–¥–µ–ª–∏";
+	if (menu == 3) return "–ù–∞—Å—Ç—Ä–æ–π–∫–∏ –≥—Ä–∞—Ñ–∏–∫–∏";
+	if (menu == 4) return "–û –ø—Ä–æ–≥—Ä–∞–º–º–µ";
+	if (menu == 5) return "–í—ã—Ö–æ–¥";
+	if (menu == 11) return "–ù–∞—Å—Ç—Ä–æ–π–∫–∏ –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–∞";
+	if (menu == 12) return "–ù–∞—Å—Ç—Ä–æ–π–∫–∏ –æ—á–µ—Ä–µ–¥–∏";
+	if (menu == 13) return "–ù–∞—Å—Ç—Ä–æ–π–∫–∏ –≥–µ–Ω–µ—Ä–∞—Ç–æ—Ä–∞ –ø—Ä–æ–≥—Ä–∞–º–º";
+	if (menu == 14) return "–ù–∞—Å—Ç—Ä–æ–π–∫–∏ —Å—Ç–∞—Ç–∏—Å—Ç–∏–∫–∏";
+	if (menu == 15) return "–ù–∞–∑–∞–¥";
+	if (menu == 16)
+	{
+		if (Show_RTI)
+		{
+			return "–û—Ç–æ–±—Ä–∞–∂–∞—Ç—å REALTIME –∏–Ω—Ñ–æ—Ä–º–∞—Ü–∏—é: –î–ê";
+		}
+		else
+		{
+			return "–û—Ç–æ–±—Ä–∞–∂–∞—Ç—å REALTIME –∏–Ω—Ñ–æ—Ä–º–∞—Ü–∏—é: –ù–ï–¢";
+		}
+	}
+	if (menu == 17)
+	{
+		if (Show_Proc)
+		{
+			return "–ü–æ–∫–∞–∑—ã–≤–∞—Ç—å –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä(-—ã): –î–ê";
+		}
+		else
+		{
+			return "–ü–æ–∫–∞–∑—ã–≤–∞—Ç—å –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä(-—ã): –ù–ï–¢";
+		}
+	}
+	if (menu == 18)
+	{
+		if (FPT % 10 == 1 && FPT % 100 != 11)
+		{
+			if (FPT == 91 && LOGIN == 1)
+			{
+				return "–ß–∞—Å—Ç–æ—Ç–∞ –æ—Ç—Ä–∏—Å–æ–≤–∫–∏: L091N‚ô• —Ç–∞–∫—Ç –∑–∞ –æ–¥–∏–Ω –∫–∞–¥—Ä";
+			}
+			return "–ß–∞—Å—Ç–æ—Ç–∞ –æ—Ç—Ä–∏—Å–æ–≤–∫–∏: " + to_string(FPT) + " —Ç–∞–∫—Ç –∑–∞ –æ–¥–∏–Ω –∫–∞–¥—Ä";
+		}
+		else
+		{
+			if (FPT % 10 >= 2 && FPT % 10 <= 4 && FPT % 100 != 12 && FPT % 100 != 13 && FPT % 100 != 14)
+			{
+				return "–ß–∞—Å—Ç–æ—Ç–∞ –æ—Ç—Ä–∏—Å–æ–≤–∫–∏: " + to_string(FPT) + " —Ç–∞–∫—Ç–∞ –∑–∞ –æ–¥–∏–Ω –∫–∞–¥—Ä";
+			}
+			else
+			{
+				return "–ß–∞—Å—Ç–æ—Ç–∞ –æ—Ç—Ä–∏—Å–æ–≤–∫–∏: " + to_string(FPT) + " —Ç–∞–∫—Ç–æ–≤ –∑–∞ –æ–¥–∏–Ω –∫–∞–¥—Ä";
+			}
+		}
+		
+	}
+	if (menu == 19)
+	{
+		if (style == 4)
+		{
+			return "–°—Ç–∏–ª—å:=" + Get_name_of_style(style);
+		}
+		return "–°—Ç–∏–ª—å: " + Get_name_of_style(style);
+	}
+	if (menu == 20) return "–ù–∞–∑–∞–¥";
 	if (menu == 56)
 	{
 		int numcore;
@@ -832,7 +1898,7 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 			}
 		}
 		if (IT == ITend) numcore = 0;
-		return " ÓÎË˜ÂÒÚ‚Ó ˇ‰Â Ì‡ 1 ÔÓˆÂÒÒÓÂ: " + to_string(numcore);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —è–¥–µ—Ä –Ω–∞ 1 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: " + to_string(numcore);
 	}
 	if (menu == 57) 
 	{
@@ -847,7 +1913,7 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 				break;
 			}
 		if (IT == ITend) numcore = 0;
-		return " ÓÎË˜ÂÒÚ‚Ó ˇ‰Â Ì‡ 2 ÔÓˆÂÒÒÓÂ: " + to_string(numcore);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —è–¥–µ—Ä –Ω–∞ 2 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: " + to_string(numcore);
 	}
 	if (menu == 58) 
 	{
@@ -862,7 +1928,7 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 				break;
 			}
 		if (IT == ITend) numcore = 0;
-		return " ÓÎË˜ÂÒÚ‚Ó ˇ‰Â Ì‡ 3 ÔÓˆÂÒÒÓÂ: " + to_string(numcore);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —è–¥–µ—Ä –Ω–∞ 3 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: " + to_string(numcore);
 	}
 	if (menu == 59) 
 	{
@@ -877,36 +1943,83 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 				break;
 			}
 		if (IT == ITend) numcore = 0;
-		return " ÓÎË˜ÂÒÚ‚Ó ˇ‰Â Ì‡ 4 ÔÓˆÂÒÒÓÂ: " + to_string(numcore);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —è–¥–µ—Ä –Ω–∞ 4 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: " + to_string(numcore);
 	}
-	if (menu == 60) return "Õ‡Á‡‰";
+	if (menu == 60) return "–ù–∞–∑–∞–¥";
 	if (menu == 61)
 	{
 		TQueue<Program> Q = ViMa.Get_queue();
-		return "ƒÎËÌ‡ Ó˜ÂÂ‰Ë: " + to_string(Q.Get_full_size());
+		return "–î–ª–∏–Ω–∞ –æ—á–µ—Ä–µ–¥–∏: " + to_string(Q.Get_full_size());
 	}
-	if (menu == 62) return " ÓÎË˜ÂÒÚ‚Ó ÔÓ„‡ÏÏ ‚ Ó˜ÂÂ‰Ë ÔÂÂ‰ Á‡ÔÛÒÍÓÏ: " + to_string(ViMa.Get_programm_in_queue_when_start());
+	if (menu == 62) return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ –ø—Ä–æ–≥—Ä–∞–º–º –≤ –æ—á–µ—Ä–µ–¥–∏ –ø–µ—Ä–µ–¥ –∑–∞–ø—É—Å–∫–æ–º: " + to_string(ViMa.Get_programm_in_queue_when_start());
 	if (menu == 63) return "???";
 	if (menu == 64) return "???";
-	if (menu == 65) return "Õ‡Á‡‰";
+	if (menu == 65) return "–ù–∞–∑–∞–¥";
 	if (menu == 66)
 	{
 		Virtual_machine ViMa(VM);
 		int maxt = ViMa.Get_max_tact();
 		int mint = ViMa.Get_min_tact();
-		return " ÓÎË˜ÂÒÚ‚Ó Ú‡ÍÚÓ‚ ‚˚ÔÓÎÌÂÌËˇ ÔÓ„‡ÏÏ: ÓÚ " + to_string(mint) + " ‰Ó " + to_string(maxt);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç–∞–∫—Ç–æ–≤ –≤—ã–ø–æ–ª–Ω–µ–Ω–∏—è –ø—Ä–æ–≥—Ä–∞–º–º: –æ—Ç " + to_string(mint) + " –¥–æ " + to_string(maxt);
 	}
 	if (menu == 67)
 	{
 		Virtual_machine ViMa(VM);
 		int maxp = ViMa.Get_max_proc();
 		int minp = ViMa.Get_min_proc();
-		return " ÓÎË˜ÂÒÚ‚Ó ÚÂ·ÛÂÏ˚ı ÔÓˆÂÒÒÓÓ‚ ‰Îˇ ÔÓ„‡ÏÏ: ÓÚ " + to_string(minp) + " ‰Ó " + to_string(maxp);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç—Ä–µ–±—É–µ–º—ã—Ö –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–æ–≤ –¥–ª—è –ø—Ä–æ–≥—Ä–∞–º–º: –æ—Ç " + to_string(minp) + " –¥–æ " + to_string(maxp);
 	}
-	if (menu == 68) return " ÓÎË˜ÂÒÚ‚Ó ÚÂ·ÛÂÏ˚ı ˇ‰Â Ì‡ N ÔÓˆÂÒÒÓÂ";
-	if (menu == 69) return "—ÍÓÓÒÚ¸ ÔÓˇ‚ÎÂÌËˇ ÔÓ„‡ÏÏ";
-	if (menu == 70) return "Õ‡Á‡‰";
-	int num_proc = 0;
+	if (menu == 68) return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç—Ä–µ–±—É–µ–º—ã—Ö —è–¥–µ—Ä –Ω–∞ N –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ";
+	if (menu == 69)
+	{
+		Virtual_machine ViMa(VM);
+		double ppt = ViMa.Get_program_per_tact();
+		string Res = "–°–∫–æ—Ä–æ—Å—Ç—å –ø–æ—è–≤–ª–µ–Ω–∏—è –ø—Ä–æ–≥—Ä–∞–º–º: " + to_string(ppt);
+		return Res.erase(Res.find(',') + 2, Res.find('\0'));
+	}
+	if (menu == 70) return "–ù–∞–∑–∞–¥";
+	if (menu == 71)
+	{
+		if (time_of_work)
+		{
+			return "–í—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã –≤ —Ç–∞–∫—Ç–∞—Ö: " + to_string(time_of_work);
+		}
+		else
+		{
+			if (style == 1)
+			{
+				return "–í—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã –≤ —Ç–∞–∫—Ç–∞—Ö: infinity war";
+			}
+			return "–í—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã –≤ —Ç–∞–∫—Ç–∞—Ö: infinity";
+		}
+	}
+	if (menu == 72)
+	{
+		return "–ó–∞–¥–µ—Ä–∂–∫–∞ –º–µ–∂–¥—É —Ç–∞–∫—Ç–∞–º–∏ " + to_string(V) + " ms ";
+	}
+	if (menu == 73)
+	{
+		if (big_statistic_now)
+		{
+			return "–†–∞—Å—à–∏—Ä–µ–Ω–Ω–∞—è —Å—Ç–∞—Ç–∏—Å—Ç–∫–∞ –≤–æ –≤—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã: –î–ê";
+		}
+		else
+		{
+			return "–†–∞—Å—à–∏—Ä–µ–Ω–Ω–∞—è —Å—Ç–∞—Ç–∏—Å—Ç–∫–∞ –≤–æ –≤—Ä–µ–º—è —Ä–∞–±–æ—Ç—ã: –ù–ï–¢";
+		}
+	}
+	if (menu == 74)
+	{
+		if (big_statistic_after)
+		{
+			return "–†–∞—Å—à–∏—Ä–µ–Ω–Ω–∞—è —Å—Ç–∞—Ç–∏—Å—Ç–∫–∞ –ø–æ—Å–ª–µ —Ä–∞–±–æ—Ç—ã: –î–ê";
+		}
+		else
+		{
+			return "–†–∞—Å—à–∏—Ä–µ–Ω–Ω–∞—è —Å—Ç–∞—Ç–∏—Å—Ç–∫–∞ –ø–æ—Å–ª–µ —Ä–∞–±–æ—Ç—ã: –ù–ï–¢";
+		}
+	}
+	if (menu == 75) return "–ù–∞–∑–∞–¥";
 	if (menu == 341)
 	{
 		Virtual_machine ViMa(VM);
@@ -914,15 +2027,13 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 		int minp = 0;
 		if (ViMa.Get_index_of_proc(1) != -1)
 		{
-			num_proc++;
 			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(1));
 			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(1));
 		}
-		return " ÓÎË˜ÂÒÚ‚Ó ÚÂ·ÛÂÏ˚ı ˇ‰Â ‰Îˇ ÔÓ„‡ÏÏ Ì‡ 1 ÔÓˆÂÒÒÓÂ: ÓÚ " + to_string(minp) + " ‰Ó " + to_string(maxp);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç—Ä–µ–±—É–µ–º—ã—Ö —è–¥–µ—Ä –¥–ª—è –ø—Ä–æ–≥—Ä–∞–º–º –Ω–∞ 1 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: –æ—Ç " + to_string(minp) + " –¥–æ " + to_string(maxp);
 	}
 	if (menu == 342)
 	{
-		num_proc++;
 		Virtual_machine ViMa(VM);
 		int maxp = 0;
 		int minp = 0;
@@ -931,11 +2042,10 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(2));
 			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(2));
 		}
-		return " ÓÎË˜ÂÒÚ‚Ó ÚÂ·ÛÂÏ˚ı ˇ‰Â ‰Îˇ ÔÓ„‡ÏÏ Ì‡ 2 ÔÓˆÂÒÒÓÂ: ÓÚ " + to_string(minp) + " ‰Ó " + to_string(maxp);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç—Ä–µ–±—É–µ–º—ã—Ö —è–¥–µ—Ä –¥–ª—è –ø—Ä–æ–≥—Ä–∞–º–º –Ω–∞ 2 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: –æ—Ç " + to_string(minp) + " –¥–æ " + to_string(maxp);
 	}
 	if (menu == 343)
 	{
-		num_proc++;
 		Virtual_machine ViMa(VM);
 		int maxp = 0;
 		int minp = 0;
@@ -944,11 +2054,10 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(3));
 			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(3));
 		}
-		return " ÓÎË˜ÂÒÚ‚Ó ÚÂ·ÛÂÏ˚ı ˇ‰Â ‰Îˇ ÔÓ„‡ÏÏ Ì‡ 3 ÔÓˆÂÒÒÓÂ: ÓÚ " + to_string(minp) + " ‰Ó " + to_string(maxp);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç—Ä–µ–±—É–µ–º—ã—Ö —è–¥–µ—Ä –¥–ª—è –ø—Ä–æ–≥—Ä–∞–º–º –Ω–∞ 3 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: –æ—Ç " + to_string(minp) + " –¥–æ " + to_string(maxp);
 	}
 	if (menu == 344)
 	{
-		num_proc++;
 		Virtual_machine ViMa(VM);
 		int maxp = 0;
 		int minp = 0;
@@ -957,9 +2066,9 @@ string MENU_ITEM(int menu, const Virtual_machine &VM)
 			maxp = ViMa.Get_max_core(ViMa.Get_index_of_proc(4));
 			minp = ViMa.Get_min_core(ViMa.Get_index_of_proc(4));
 		}
-		return " ÓÎË˜ÂÒÚ‚Ó ÚÂ·ÛÂÏ˚ı ˇ‰Â ‰Îˇ ÔÓ„‡ÏÏ Ì‡ 4 ÔÓˆÂÒÒÓÂ: ÓÚ " + to_string(minp) + " ‰Ó " + to_string(maxp);
+		return "–ö–æ–ª–∏—á–µ—Å—Ç–≤–æ —Ç—Ä–µ–±—É–µ–º—ã—Ö —è–¥–µ—Ä –¥–ª—è –ø—Ä–æ–≥—Ä–∞–º–º –Ω–∞ 4 –ø—Ä–æ—Ü–µ—Å—Å–æ—Ä–µ: –æ—Ç " + to_string(minp) + " –¥–æ " + to_string(maxp);
 	}
-	if (menu == 345) return "Õ‡Á‡‰";
+	if (menu == 345) return "–ù–∞–∑–∞–¥";
 
 	return "404";
 }
@@ -1017,7 +2126,14 @@ void plus_1_power_proc(Virtual_machine &VM, int num_proc)
 	{
 		if (IT->Get_cores() == 64)
 		{
-			VM.Set_configuration_p(num_proc, 0);
+			if (VM.Get_processors().size() == 1)
+			{
+				VM.Set_configuration_p(num_proc, 1);
+			}
+			else
+			{
+				VM.Set_configuration_p(num_proc, 0);
+			}
 		}
 		else
 		{
@@ -1046,7 +2162,21 @@ void minus_1_power_proc(Virtual_machine &VM, int num_proc)
 		}
 		else
 		{
-			VM.Set_configuration_p(num_proc,IT->Get_cores() / 4);
+			if (IT->Get_cores() != 1)
+			{
+				VM.Set_configuration_p(num_proc, IT->Get_cores() / 4);
+			}
+			else
+			{
+				if (VM.Get_processors().size() == 1)
+				{
+					VM.Set_configuration_p(num_proc, 64);
+				}
+				else
+				{
+					VM.Set_configuration_p(num_proc, IT->Get_cores() / 4);
+				}
+			}
 		}
 	}
 	else
@@ -1115,12 +2245,12 @@ void minus_1_style()
 }
 string Get_name_of_style(int num)
 {
-	if (num == 0) return "◊¡";
-	if (num == 1) return "¡◊";
-	if (num == 2) return "”Í‡ËÌ‡";
-	if (num == 3) return "ﬂÔÓÌËˇ";
+	if (num == 0) return "–ß–ë";
+	if (num == 1) return "–ë–ß";
+	if (num == 2) return "–£–∫—Ä–∞–∏–Ω–∞";
+	if (num == 3) return "–Ø–ø–æ–Ω–∏—è";
 	if (num == 4) return "Pascal";
-	if (num == 5) return "¬˚‚Ë „Î‡Á";
+	if (num == 5) return "–í—ã—Ä–≤–∏ –≥–ª–∞–∑";
 
 }
 void Rand_colour()

@@ -122,12 +122,6 @@ TEST(Program_Generation, throw_when_min_core_less_0)
 	ASSERT_ANY_THROW(PG.Set_min_core(0, -1));
 }
 
-TEST(Program_Generation, throw_when_index_max_core_more_max_proc)
-{
-	Program_Generation PG;
-	ASSERT_ANY_THROW(PG.Set_max_core(PG.Get_max_proc(), 1));
-}
-
 TEST(Program_Generation, throw_when_index_min_core_more_max_proc)
 {
 	Program_Generation PG;
@@ -146,4 +140,29 @@ TEST(Program_Generation, throw_when_index_min_core_less_0)
 	ASSERT_ANY_THROW(PG.Set_min_core(-1, 1));
 }
 
-
+TEST(Program_Generation, check_program_generator_1)
+{
+	Program_Generation PG;
+	Program P1, P2;
+	int tacts = 10;
+	int proc = 1;
+	int cores = 4;
+	P1.tacts = tacts;
+	vector<int> c;
+	for (int i = 0; i < cores; i++)
+	{
+		c.push_back(0);
+	}
+	P1.act_core.push_back(c);
+	PG.Set_max_tact(tacts);
+	PG.Set_min_tact(tacts);
+	PG.Set_max_proc(proc);
+	PG.Set_min_proc(proc);
+	PG.Set_max_core(0, cores);
+	PG.Set_min_core(0, cores);
+	P2 = PG.Generate();
+	EXPECT_EQ(P1.tacts, P2.tacts);
+	EXPECT_EQ(P1.act_core.size(), P2.act_core.size());
+	EXPECT_EQ(P1.act_core[0].size(), P2.act_core[0].size());
+	
+}

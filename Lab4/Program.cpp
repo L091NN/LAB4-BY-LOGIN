@@ -10,7 +10,7 @@ Program_Generation::Program_Generation()
 		max_core[i] = 0;
 		min_core[i] = 0;
 	}
-	Set_max_core(0, 2);
+	Set_max_core(0, 1);
 	Set_max_tact(100);
 	Set_min_tact(1);
 }
@@ -42,13 +42,13 @@ void Program_Generation::Set_min_tact(int num)
 }
 void Program_Generation::Set_max_core(int index, int num)
 {
-	if (index < 0 || index >= max_proc) throw("Incorrect parameter");
+	if (index < 0) throw("Incorrect parameter");
 	if (num < 0 || num > MAX_CORES) throw("Incorrect parameter"); // изменить MAX_CORES на количество в опредделённом процессоре, после написания класса процессор
 	max_core[index] = num;
 }
 void Program_Generation::Set_min_core(int index, int num)
 {
-	if (index < 0 || index >= max_proc) throw("Incorrect parameter");
+	if (index < 0) throw("Incorrect parameter");
 	if (num > max_core[index] || num < 0) throw("Incorrect parameter");
 	min_core[index] = num;
 }
@@ -81,36 +81,40 @@ Program Program_Generation::Generate()
 	Program p;
 	p.act_core.pop_back();
 	p.ID = ID++;
-	if (min_tact == max_tact)
+	if (max_tact == min_tact)
 	{
-		p.tacts = min_tact;
-		int proc_num = rand() % max_proc + 1;
-		for (int i = 0; i < proc_num; i++)
-		{
-			int core_num = rand() % max_core[i] + 1;
-			vector<int> c;
-			for (int j = 0; j < core_num; j++)
-			{
-				c.push_back(0);
-			}
-			p.act_core.push_back(c);
-		}
+		p.tacts = max_tact;
 	}
-	else 
+	else
 	{
-
-		p.tacts = rand() % (max_tact - min_tact) + min_tact;
-		int proc_num = rand() % max_proc + 1;
-		for (int i = 0; i < proc_num; i++)
+		p.tacts = rand() % (max_tact - min_tact + 1) + min_tact;
+	}
+	int proc_num = 0;
+	if (max_proc == min_proc)
+	{
+		proc_num = max_proc;
+	}
+	else
+	{
+		proc_num = rand() % (max_proc - min_proc + 1) + min_proc;
+	}
+	for (int i = 0; i < MAX_PROCESSORS; i++)
+	{
+		int core_num = 0;
+		if (max_core[i] == min_core[i])
 		{
-			int core_num = rand() % max_core[i] + 1;
-			vector<int> c;
-			for (int j = 0; j < core_num; j++)
-			{
-				c.push_back(0);
-			}
-			p.act_core.push_back(c);
+			core_num = max_core[i];
 		}
+		else
+		{
+			core_num = rand() % (max_core[i] - min_core[i] + 1) + min_core[i];
+		}
+		vector<int> c;
+		for (int j = 0; j < core_num; j++)
+		{
+			c.push_back(0);
+		}
+		p.act_core.push_back(c);
 	}
 
 	return p;

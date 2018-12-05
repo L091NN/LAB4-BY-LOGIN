@@ -3,7 +3,8 @@
 Statistic::Statistic()
 {
 	list<Program> Complete_Program = {};
-	list<Program> Fail_Program = {};
+	list<Program> Fail_Program_p = {};
+	list<Program> Fail_Program_q = {};
 	list<Program> Act_Program = {};
 	list<int> tact_now = {};
 	list<Program> Queue_Program = {};
@@ -16,9 +17,13 @@ list<Program> Statistic::Get_Complete_Program()
 {
 	return Complete_Program;
 }
-list<Program> Statistic::Get_Fail_Program()
+list<Program> Statistic::Get_Fail_Program_p()
 {
-	return Fail_Program;
+	return Fail_Program_p;
+}
+list<Program> Statistic::Get_Fail_Program_q()
+{
+	return Fail_Program_q;
 }
 list<Program> Statistic::Get_Act_Program()
 {
@@ -79,6 +84,8 @@ void Virtual_machine::Set_configuration_p(int num, int noc)
 	}
 	if (IT != P.end())
 	{
+		Set_max_core(num - 1, noc);
+		Set_min_core(num - 1, 0);
 		if (noc < 1)
 		{
 			P.erase(IT);
@@ -92,6 +99,8 @@ void Virtual_machine::Set_configuration_p(int num, int noc)
 	{
 		Processor Pro(num, noc);
 		P.push_back(Pro);
+		Set_max_core(num - 1, noc);
+		Set_min_core(num - 1, 0);
 	}
 	
 }
@@ -109,6 +118,73 @@ void Virtual_machine::Set_prog_in_queue_when_start(int piq)
 vector<Processor> Virtual_machine::Get_processors()
 {
 	return P;
+}
+
+bool Virtual_machine::fit_program_p(const Program &Pr)
+{
+	vector<int> Proc;
+	vector<int> numpc;
+	vector<int> Prog;
+	vector<int> numpg;
+
+	for (int x = 0; x < Pr.act_core.size(); ++x)
+	{
+		int max = 0;
+		int num = 0;
+		for (int y = 0; y < Pr.act_core.size(); ++y)
+		{
+			if (Pr.act_core[y].size() > max)
+			{
+				int ind = 0;
+				for (int z = 0; z < numpg.size(); ++z)
+				{
+					if (y == numpg[z])
+					{
+						ind = 1;
+						break;
+					}
+				}
+				if (ind == 0)
+				{
+					max = Pr.act_core[y].size();
+					num = y;
+
+				}
+			}
+		}
+		Prog.push_back(max);
+		numpg.push_back(num);
+		max = 0;
+		num = 0;
+		for (int y = 0; y < P.size(); ++y)
+		{
+			if (P[y].Get_cores() > max)
+			{
+				int ind = 0;
+				for (int z = 0; z < numpc.size(); ++z)
+				{
+					if (y == numpc[z])
+					{
+						ind = 1;
+						break;
+					}
+				}
+				if (ind == 0)
+				{
+					max = P[y].Get_cores();
+					num = y;
+
+				}
+			}
+		}
+		Proc.push_back(max);
+		numpc.push_back(num);
+		if (Proc[x] < Prog[x])
+			return 0;
+
+	}
+
+	return 1;
 }
 
 bool Virtual_machine::fit_program(const Program &Pr)
@@ -314,26 +390,40 @@ void Virtual_machine::plus_tact(int t)
 			}
 			else
 			{
-				Fail_Program.push_back(Generate());
+				Fail_Program_q.push_back(Generate());
 			}
 		}
 		while (1)
 		{
-			if (fit_program(Queue.top()))
+			if (!Queue.is_empty())
 			{
-				vector<int> distribution = suitable_option(Queue.top());
-				Program Proga = Queue.pop();
-				for (int z = 0; z < distribution.size(); ++z)
+				if (fit_program_p(Queue.top()))
 				{
-					P[distribution[z]].add_program(Proga, z);
-					Proga.act_proc.push_back(distribution[z]);
+					Fail_Program_p.push_back(Queue.pop());
 				}
-				tact_now.push_back(Proga.tacts);
-				Act_Program.push_back(Proga);
+				else
+				{
+					if (fit_program(Queue.top()))
+					{
+						vector<int> distribution = suitable_option(Queue.top());
+						Program Proga = Queue.pop();
+						for (int z = 0; z < distribution.size(); ++z)
+						{
+							P[distribution[z]].add_program(Proga, z);
+							Proga.act_proc.push_back(distribution[z]);
+						}
+						tact_now.push_back(Proga.tacts);
+						Act_Program.push_back(Proga);
+					}
+					else
+					{
+						break; // ??
+					}
+				}
 			}
 			else
 			{
-				break; // ??
+				break;
 			}
 		}
 
@@ -388,4 +478,9 @@ int Virtual_machine::Get_num_of_proc(int index)
 	}
 	
 	return -1;
+}
+
+double Virtual_machine::Get_program_per_tact()
+{
+	return program_per_tact;
 }

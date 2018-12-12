@@ -34,21 +34,27 @@ Processor::~Processor()
 bool Processor::add_program(const Program &P, int number_of_processor)
 {
 	Program Pr = P;
-	for (int x = 0; x < P.act_core[number_of_processor].size(); x++)
+	if (number_of_processor == -1) return 1;
+	if (P.act_core[number_of_processor].size())
 	{
-		for (int y = 0; y < this->noc; y++)
+		for (int x = 0; x < P.act_core[number_of_processor].size(); x++)
 		{
-			if (cores[y].is_work == 0)
+			for (int y = 0; y < this->noc; y++)
 			{
-				cores[y].P = P;
-				cores[y].is_work = 1;
-				Pr.act_core[number_of_processor][x] = cores[y].num;
-				--free_cores;
-				break;
+				if (cores[y].is_work == 0)
+				{
+					cores[y].P = P;
+					cores[y].is_work = 1;
+					Pr.act_core[number_of_processor][x] = cores[y].num;
+					--free_cores;
+					break;
+				}
 			}
 		}
+		act_program.push_back(Pr);
+
+		return 0;
 	}
-	act_program.push_back(Pr);
 
 	return 1;
 }
@@ -81,23 +87,28 @@ Program Processor::Get_act_program(int num)
 Program Processor::complete_program(const Program &P, int number_of_processor)
 {
 	Program Pr;
-	for (act_program_it = act_program.begin(); act_program_it != act_program.end(); act_program_it++)
+	if (number_of_processor == -1) return P;
+	if (P.act_core[number_of_processor].size())
 	{
-		if (act_program_it._Ptr->ID == P.ID)
+		for (act_program_it = act_program.begin(); act_program_it != act_program.end(); act_program_it++)
 		{
-			Pr = *act_program_it;
-			act_program.erase(act_program_it);
-			break;
+			if (act_program_it._Ptr->ID == P.ID)
+			{
+				Pr = *act_program_it;
+				act_program.erase(act_program_it);
+				break;
+			}
 		}
+		for (int x = 0; x < P.act_core[number_of_processor].size(); x++)
+		{
+			cores[Pr.act_core[number_of_processor][x] - 1].is_work = 0;
+			cores[Pr.act_core[number_of_processor][x] - 1].P = {};
+			++free_cores;
+		}
+		return Pr;
 	}
-	for (int x = 0; x < P.act_core[number_of_processor].size(); x++)
-	{
-		cores[Pr.act_core[number_of_processor][x] - 1].is_work = 0;
-		cores[Pr.act_core[number_of_processor][x] - 1].P = {};
-		++free_cores;
-	}
-	
-	return Pr;
+	return P;
+
 
 }
 

@@ -20,16 +20,17 @@ bool Show_RTI = 1;
 bool Show_Proc = 1;
 unsigned int FPT = 1;
 unsigned int time_of_work = 0;
-unsigned int V = 1000;
-bool big_statistic_now = 1;
+unsigned int V = 100;
+bool big_statistic_now = 0;
 bool big_statistic_after = 0;
 unsigned int LOGIN = 0;
 int queue_last = 0;
+Virtual_machine past_VM;
 
 void gotoxy(int xpos, int ypos);
 void display_cursor(bool tf);
 void set_colour(int colour_of_text, int colour_of_background);
-void Output_information();
+void Output_information(const Virtual_machine &VM);
 int L091NN();
 void START_MENU(int first_item, const Virtual_machine &VM, int ind = 0);
 void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &Vm);
@@ -46,6 +47,9 @@ string Get_name_of_style(int num);
 string MENU_ITEM(int menu, const Virtual_machine &Vm);
 void DROW_BG_WORK(int x_move = 0, int y_move = 0);
 void DROW_QUEUE_STATUS(int size, int size_full, int x_move = 0, int y_move = 0);
+void DROW_INFORMATION_WORK(const Virtual_machine &VM);
+void DROW_BEGIN_PROCESSORS(const Virtual_machine &VM, int xi = 0, int yi = 0);
+void DROW_PROCESSORS(const Virtual_machine &VM, bool repeat = 1, int xi = 0, int yi = 0);
 
 
 enum ConsoleColor {
@@ -78,17 +82,18 @@ int main()
 	int menu_past = 1;
 	int menu_post = 0;
 	Virtual_machine VM;
+	past_VM = VM;
 	int proc_num = VM.Get_processors().size();
-	char key = 0;
 	while(1)
 	{
+		char key = 0;
 		bool start_indicator = 0;
 		START_MENU(1, VM);
+		Output_information(VM);
 
 		while (!start_indicator)
 		{
-		
-			if (style == 5) Rand_colour();
+			if (style == 5 && (menu_future - 1) / 5 != (menu_past - 1) / 5) Rand_colour();
 			vector<Processor> VMP = VM.Get_processors();
 			key = _getch();
 			switch (key)
@@ -198,7 +203,10 @@ int main()
 					}
 					case 73:
 					{
-						big_statistic_now -= 1;
+						if (!Show_Proc)
+						{
+							big_statistic_now -= 1;
+						}
 						break;
 					}
 					case 74:
@@ -507,6 +515,10 @@ int main()
 					case 16:
 					{
 						Show_RTI -= 1;
+						if (Show_RTI == 0)
+						{
+							big_statistic_now = 0;
+						}
 						break;
 					}
 					case 17:
@@ -636,7 +648,13 @@ int main()
 					}
 					case 73:
 					{
-						big_statistic_now -= 1;
+						if (!Show_Proc)
+						{
+							if (!Show_RTI)
+							{
+								big_statistic_now -= 1;
+							}
+						}
 						break;
 					}
 					case 74:
@@ -719,6 +737,10 @@ int main()
 					case 16:
 					{
 						Show_RTI -= 1;
+						if (Show_RTI == 0)
+						{
+							big_statistic_now = 0;
+						}
 						break;
 					}
 					case 17:
@@ -838,7 +860,13 @@ int main()
 					}
 					case 73:
 					{
-						big_statistic_now -= 1;
+						if (!Show_Proc)
+						{
+							if (!Show_RTI)
+							{
+								big_statistic_now -= 1;
+							}
+						}
 						break;
 					}
 					case 74:
@@ -1196,13 +1224,14 @@ int main()
 				default:
 					break;
 			}
-			if (key != -32 && start_indicator == 0)
+			if (start_indicator == 0 && key != -32)
 			{
 				DROW(menu_future, menu_past, menu_post, VM);
 			}
 		}
 
 		system("cls");
+		past_VM = VM;
 
 		if (LOGIN == 2)
 		{
@@ -1211,7 +1240,42 @@ int main()
 		}
 		else
 		{
+			if (Show_Proc)
+			{
+				DROW_BG_WORK();
+				DROW_BEGIN_PROCESSORS(VM);
+				DROW_PROCESSORS(VM, 0);
+			}
+			if (Show_RTI)
+			{
+				DROW_INFORMATION_WORK(VM);
+			}
+			VM.START();
+			if (Show_Proc || Show_RTI)
+			{
+				_getch();
+				while (1)
+				{
+					VM.plus_tact();
+					if (Show_Proc)
+					{
+						DROW_PROCESSORS(VM);
+						DROW_QUEUE_STATUS(VM.Get_queue().size(), VM.Get_queue().Get_full_size());
+					}
+					if (Show_RTI)
+					{
+						DROW_INFORMATION_WORK(VM);
+						if (big_statistic_now)
+						{
 
+						}
+						else
+						{
+
+						}
+					}
+				}
+			}
 		}
 	
 	
@@ -1247,9 +1311,41 @@ void set_colour(int colour_of_text, int colour_of_background)
 
 }
 
-void Output_information()
+void Output_information(const Virtual_machine &VM)
 {
+	Virtual_machine V(VM);
+	int yout = 0;
+	int xout = 60;
+	int all_cores = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (V.Get_index_of_proc(i + 1) != -1)
+		{
+			all_cores += V.Get_processors()[V.Get_index_of_proc(i + 1)].Get_cores();
+		}
+	}
+	gotoxy(xout, yout++);
+	cout << "Всего процессоров: " + to_string(V.Get_processors().size());
+	gotoxy(xout, yout++);
+	cout << "Всего ядер: " + to_string(all_cores);
+	gotoxy(xout, yout++);
+	cout << "Длина очереди: " + to_string(V.Get_queue().Get_full_size());
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(69, VM);
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(71, VM);
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(72, VM);
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(73, VM);
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(74, VM);
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(16, VM);
+	gotoxy(xout, yout++);
+	cout << MENU_ITEM(17, VM);
 
+	
 }
 
 int L091NN()
@@ -2299,6 +2395,10 @@ void DROW(int menu_future, int menu_past, int menu_post, const Virtual_machine &
 			{
 				START_MENU(trunc((menu_future - 1) / 5) * 5 + 1, VM);
 			}
+			if ((menu_past - 1) / 5 != (menu_future - 1) / 5 && menu_future == 1)
+			{
+				Output_information(VM);
+			}
 		}
 	}
 	}
@@ -3167,6 +3267,186 @@ void DROW_QUEUE_STATUS(int size, int size_full, int x_move, int y_move)
 				}
 				
 			}
+		}
+	}
+}
+void DROW_INFORMATION_WORK(const Virtual_machine &VM)
+{
+	Virtual_machine V(VM);
+	unsigned int xpos = 0;
+	unsigned int ypos = 0;
+	int all_cores = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		if (V.Get_index_of_proc(i + 1) != -1)
+		{
+			all_cores += V.Get_processors()[V.Get_index_of_proc(i + 1)].Get_cores();
+		}
+	}
+	set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+	gotoxy(xpos, ypos++);
+	if (time_of_work)
+	{
+		cout << "Такт: " + to_string(V.Get_tact()) + '/' + to_string(time_of_work);
+	}
+	else
+	{
+		cout << "Такт: " + to_string(V.Get_tact());
+	}
+	gotoxy(xpos, ypos++);
+	cout << "Программы: " + to_string(V.Get_Act_Program().size()) + '/' + to_string(V.Get_Complete_Program().size()) + '/' + to_string(V.Get_Act_Program().size() + V.Get_Complete_Program().size() + V.Get_Fail_Program_p().size() + V.Get_Fail_Program_q().size());
+	gotoxy(xpos, ypos++);
+	cout << "Отказы: " + to_string(V.Get_Fail_Program_p().size()) + '/' + to_string(V.Get_Fail_Program_q().size());
+}
+void DROW_BEGIN_PROCESSORS(const Virtual_machine &VM, int xi, int yi)
+{
+	Virtual_machine V(VM);
+	for (int num = 1; num < 5; num++)
+	{
+		int size_side = 8;
+		int xpos = 75 + xi;
+		int ypos = 19 + yi;
+		bool xsign = 0;
+		bool ysign = 0;
+		if (num % 2 == 1)
+		{
+			xpos = 45 + xi;
+			xsign = 1;
+		}
+		if ((num - 1) / 2 == 0)
+		{
+			ypos = 3 + yi;
+			ysign = 1;
+		}
+		if (V.Get_index_of_proc(num) != -1)
+		{
+			set_colour(mass_of_style[style][1], mass_of_style[style][0]);
+			size_side = sqrt(V.Get_processors()[V.Get_index_of_proc(num)].Get_cores());
+		}
+		else
+		{
+			set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+			//set_colour(mass_of_style[style][1], 12);
+		}
+		for (int yy = 0; yy < size_side;)
+		{
+			for (int xx = 0; xx < size_side;)
+			{
+				if (xsign == 0 && ysign == 0)
+				{
+					gotoxy(xpos - xx * 2, ypos - yy);
+				}
+				if (xsign == 1 && ysign == 0)
+				{
+					gotoxy(xpos + xx * 2, ypos - yy);
+				}
+				if (xsign == 0 && ysign == 1)
+				{
+					gotoxy(xpos - xx * 2, ypos + yy);
+				}
+				if (xsign == 1 && ysign == 1)
+				{
+					gotoxy(xpos + xx * 2, ypos + yy);
+				}
+				if (xx == size_side - 1)
+				{
+					if (xsign == 0)
+					{
+						if (ysign)
+						{
+							gotoxy(xpos - xx * 2 + 1, ypos + yy);
+						}
+						else
+						{
+							gotoxy(xpos - xx * 2 + 1, ypos - yy);
+						}
+					}
+				}
+				cout << ' ';
+				if (xx != size_side - 1)
+				{
+					cout << ' ';
+				}
+				xx++;
+			}
+			yy++;
+		}
+	}
+	set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+}
+void DROW_PROCESSORS(const Virtual_machine &VM,bool repeat, int xi, int yi)
+{
+	Virtual_machine V(VM);
+	for (int num = 1; num < 5; num++)
+	{
+		if (V.Get_index_of_proc(num) != -1)
+		{
+			int size_side = sqrt(V.Get_processors()[V.Get_index_of_proc(num)].Get_cores());
+			int xpos = 75 + xi;
+			int ypos = 19 + yi;
+			bool xsign = 0;
+			bool ysign = 0;
+			if (num % 2 == 1)
+			{
+				xpos = 45 + xi;
+				xsign = 1;
+			}
+			if ((num - 1) / 2 == 0)
+			{
+				ypos = 3 + yi;
+				ysign = 1;
+			}
+			for (int yy = 0; yy < size_side;)
+			{
+				for (int xx = 0; xx < size_side;)
+				{
+					if (xsign == 0 && ysign == 0)
+					{
+						gotoxy(xpos - xx * 2 + 1, ypos - yy);
+					}
+					if (xsign == 1 && ysign == 0)
+					{
+						gotoxy(xpos + xx * 2, ypos - yy);
+					}
+					if (xsign == 0 && ysign == 1)
+					{
+						gotoxy(xpos - xx * 2 + 1, ypos + yy);
+					}
+					if (xsign == 1 && ysign == 1)
+					{
+						gotoxy(xpos + xx * 2, ypos + yy);
+					}
+					if (repeat)
+					{
+							if (V.Get_processors()[V.Get_index_of_proc(num)].Get_core(yy * size_side + xx).is_work
+								!= past_VM.Get_processors()[V.Get_index_of_proc(num)].Get_core(yy * size_side + xx).is_work)
+							{
+								if (V.Get_processors()[V.Get_index_of_proc(num)].Get_core(yy * size_side + xx).is_work)
+								{
+									set_colour(mass_of_style[style][1], 12);
+									cout << '1';
+									set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+								}
+								else
+								{
+									set_colour(mass_of_style[style][1], 10);
+									cout << '0';
+									set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+								}
+							}
+					}
+					else
+					{
+						set_colour(mass_of_style[style][1], 10);
+						cout << '0';
+						set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+					}
+					xx++;
+				}
+				yy++;
+			}
+
+
 		}
 	}
 }

@@ -152,8 +152,11 @@ bool Virtual_machine::fit_program_p(const Program &Pr)
 				}
 			}
 		}
-		Prog.push_back(max);
-		numpg.push_back(num);
+		if (Pr.act_core[x].size())
+		{
+			Prog.push_back(max);
+			numpg.push_back(num);
+		}
 		max = 0;
 		num = 0;
 		for (int y = 0; y < P.size(); ++y)
@@ -177,11 +180,13 @@ bool Virtual_machine::fit_program_p(const Program &Pr)
 				}
 			}
 		}
-		Proc.push_back(max);
-		numpc.push_back(num);
-		if (Proc[x] < Prog[x])
-			return 0;
-
+		if (Pr.act_core[x].size())
+		{
+			Proc.push_back(max);
+			numpc.push_back(num);
+			if (Proc.back() < Prog.back())
+				return 0;
+		}
 	}
 
 	return 1;
@@ -219,8 +224,11 @@ bool Virtual_machine::fit_program(const Program &Pr)
 				}
 			}
 		}
-		Prog.push_back(max);
-		numpg.push_back(num);
+		if (Pr.act_core[x].size())
+		{
+			Prog.push_back(max);
+			numpg.push_back(num);
+		}
 		max = 0;
 		num = 0;
 		for (int y = 0; y < P.size(); ++y)
@@ -244,10 +252,13 @@ bool Virtual_machine::fit_program(const Program &Pr)
 				}
 			}
 		}
-		Proc.push_back(max);
-		numpc.push_back(num);
-		if (Proc[x] < Prog[x])
-			return 0;
+		if (Pr.act_core[x].size())
+		{
+			Proc.push_back(max);
+			numpc.push_back(num);
+			if (Proc.back() < Prog.back())
+				return 0;
+		}
 
 	}
 
@@ -286,8 +297,11 @@ vector<int> Virtual_machine::suitable_option(const Program &Pr) // возвращает но
 				}
 			}
 		}
-		Prog.push_back(max);
-		numpg.push_back(num);
+		if (Pr.act_core[x].size())
+		{
+			Prog.push_back(max);
+			numpg.push_back(num);
+		}
 		max = 0;
 		num = 0;
 		for (int y = 0; y < P.size(); ++y)
@@ -311,8 +325,11 @@ vector<int> Virtual_machine::suitable_option(const Program &Pr) // возвращает но
 				}
 			}
 		}
-		Proc.push_back(max);
-		numpc.push_back(num);
+		if (Pr.act_core[x].size())
+		{
+			Proc.push_back(max);
+			numpc.push_back(num);
+		}
 
 	}
 	for (int i = numpg.size() - 1; i > 0; --i)
@@ -368,7 +385,7 @@ void Virtual_machine::plus_tact(int t)
 				Complete_Program.push_back(*(PIT));
 				for (int y = 0; y < PIT -> act_proc.size(); ++y)
 				{
-					P[PIT->act_proc[y]].complete_program(*PIT,y);
+					P[PIT->act_proc[y]].complete_program(*PIT,Get_index_of_proc(y));
 				}
 				Act_Program.erase(PIT++);
 				tact_now.erase(IIT++);
@@ -397,7 +414,7 @@ void Virtual_machine::plus_tact(int t)
 		{
 			if (!Queue.is_empty())
 			{
-				if (fit_program_p(Queue.top()))
+				if (!fit_program_p(Queue.top()))
 				{
 					Fail_Program_p.push_back(Queue.pop());
 				}
@@ -409,7 +426,7 @@ void Virtual_machine::plus_tact(int t)
 						Program Proga = Queue.pop();
 						for (int z = 0; z < distribution.size(); ++z)
 						{
-							P[distribution[z]].add_program(Proga, z);
+							P[distribution[z]].add_program(Proga, Get_index_of_proc(z));
 							Proga.act_proc.push_back(distribution[z]);
 						}
 						tact_now.push_back(Proga.tacts);

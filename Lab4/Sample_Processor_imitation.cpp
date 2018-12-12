@@ -1253,8 +1253,7 @@ int main()
 			VM.START();
 			if (Show_Proc || Show_RTI)
 			{
-				_getch();
-				while (1)
+				while (_getch())
 				{
 					VM.plus_tact();
 					if (Show_Proc)
@@ -3136,6 +3135,9 @@ void DROW_QUEUE_STATUS(int size, int size_full, int x_move, int y_move)
 	if (size < 0) throw ("ERROR! size < 0");
 	if (size > 0)
 	{
+		gotoxy(64, 23);
+		set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		cout << to_string(size) + '/' + to_string(size_full);
 		if (queue_last < 0)
 		{
 			queue_last = 0;
@@ -3276,6 +3278,21 @@ void DROW_INFORMATION_WORK(const Virtual_machine &VM)
 	unsigned int xpos = 0;
 	unsigned int ypos = 0;
 	int all_cores = 0;
+	if (V.Get_tact() == 1)
+	{
+		gotoxy(92, 17);
+		set_colour(mass_of_style[style][0], mass_of_style[style][1]);
+		cout << V.Get_program_per_tact();
+		int icesize = 0;
+		double fast = V.Get_program_per_tact();
+		for (int i = 0; fast > 1.0000001; i++)
+		{
+			fast /= 10;
+			icesize++;
+		}
+		gotoxy(93 + icesize, 17);
+		cout << " prog/sec";
+	}
 	for (int i = 0; i < 4; i++)
 	{
 		if (V.Get_index_of_proc(i + 1) != -1)
@@ -3287,16 +3304,16 @@ void DROW_INFORMATION_WORK(const Virtual_machine &VM)
 	gotoxy(xpos, ypos++);
 	if (time_of_work)
 	{
-		cout << "Такт: " + to_string(V.Get_tact()) + '/' + to_string(time_of_work);
+		cout << "Такт: " + to_string(V.Get_tact()) + '/' + to_string(time_of_work) + "     ";
 	}
 	else
 	{
-		cout << "Такт: " + to_string(V.Get_tact());
+		cout << "Такт: " + to_string(V.Get_tact()) + "     ";
 	}
 	gotoxy(xpos, ypos++);
-	cout << "Программы: " + to_string(V.Get_Act_Program().size()) + '/' + to_string(V.Get_Complete_Program().size()) + '/' + to_string(V.Get_Act_Program().size() + V.Get_Complete_Program().size() + V.Get_Fail_Program_p().size() + V.Get_Fail_Program_q().size());
+	cout << "Программы: " + to_string(V.Get_Act_Program().size()) + '/' + to_string(V.Get_Complete_Program().size()) + '/' + to_string(V.Get_Act_Program().size() + V.Get_Complete_Program().size() + V.Get_Fail_Program_p().size() + V.Get_Fail_Program_q().size()) + "     ";
 	gotoxy(xpos, ypos++);
-	cout << "Отказы: " + to_string(V.Get_Fail_Program_p().size()) + '/' + to_string(V.Get_Fail_Program_q().size());
+	cout << "Отказы: " + to_string(V.Get_Fail_Program_p().size()) + '/' + to_string(V.Get_Fail_Program_q().size()) + "     ";
 }
 void DROW_BEGIN_PROCESSORS(const Virtual_machine &VM, int xi, int yi)
 {

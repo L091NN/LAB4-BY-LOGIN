@@ -385,11 +385,10 @@ void Virtual_machine::plus_tact(int t)
 				Complete_Program.push_back(*(PIT));
 				for (int y = 0; y < PIT -> act_proc.size(); ++y)
 				{
-					P[PIT->act_proc[y]].complete_program(*PIT,Get_index_of_proc(y));
+					P[PIT->act_proc[y]].complete_program(*PIT, PIT ->act_proc[y]);
 				}
 				Act_Program.erase(PIT++);
 				tact_now.erase(IIT++);
-				
 			}
 			else
 			{
@@ -426,7 +425,7 @@ void Virtual_machine::plus_tact(int t)
 						Program Proga = Queue.pop();
 						for (int z = 0; z < distribution.size(); ++z)
 						{
-							P[distribution[z]].add_program(Proga, Get_index_of_proc(z));
+							P[distribution[z]].add_program(Proga, distribution[z]);
 							Proga.act_proc.push_back(distribution[z]);
 						}
 						tact_now.push_back(Proga.tacts);

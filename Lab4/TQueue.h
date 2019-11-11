@@ -8,6 +8,7 @@ class TQueue
 	long long int pop_index;
 	int full_size;
 	ElemType *Data;
+
 public:
 	TQueue(int size = 100)
 	{

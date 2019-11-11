@@ -135,11 +135,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Lab4\Processor.cpp" />
+    <ClCompile Include="..\Lab4\Program.cpp" />
+    <ClCompile Include="..\Lab4\Virtual_machine.cpp" />
     <ClCompile Include="test_main.cpp" />
+    <ClCompile Include="test_processor.cpp" />
+    <ClCompile Include="test_program.cpp" />
     <ClCompile Include="test_queue.cpp" />
+    <ClCompile Include="test_virtual_machine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Lab4\Processor.h" />
+    <ClInclude Include="..\Lab4\Program.h" />
     <ClInclude Include="..\Lab4\TQueue.h" />
+    <ClInclude Include="..\Lab4\Virtual_machine.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lab4\Lab4.vcxproj">
